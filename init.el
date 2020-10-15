@@ -23,7 +23,7 @@
 
 ;; Change default font to 16 point Consolas
 (custom-set-faces
- '(default ((t (:height 160 :family "Hack")))));"Consolas")))))
+ '(default ((t (:height 160 :family "Hack")))))
 
 ;; Change theme to zenburn
 (add-to-list 'custom-theme-load-path "~/.emacs.d/themes/")
