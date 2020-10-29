@@ -68,13 +68,15 @@
   (global-set-key [f8] 'neotree-toggle)
   )
 
-;; Use IPython for REPL
-(setq python-shell-interpreter "jupyter"
-      python-shell-interpreter-args "console --simple-prompt"
-      python-shell-prompt-detect-failure-warning nil)
-(add-to-list 'python-shell-completion-native-disabled-interpreters
-	                  "jupyter")
-
+;; Interative bash in new window
+(defun ml/bash ()
+  "Start a terminal emulator in a new window"
+  (interactive)
+  (split-window-sensibly)
+  (other-window 1)
+  (ansi-term (executable-find "bash"))
+  )
+(global-key-set (bkd "C-c b") #'ml/bash)
 
 ;;
 ;; Basic customization
@@ -99,13 +101,13 @@
 
 ; Set org todo keywords
 (setq org-todo-keywords
-      '((sequence "TODO" "IN-PROGRESS" "WAITING" "DONE" "CANCELLED"))
+      '((sequence "TODO" "IN-PROGRESS" "WAITING" "CANCELLED" "DONE"))
       org-todo-keyword-faces
       '(("TODO" . "red")
       ("IN-PROGRESS" . "orange")
       ("WAITING" . "yellow")
-      ("DONE" . "black")
-      ("CANCELLED" . "black")))
+      ("CANCELLED" . "black")
+      ("DONE" . "black")))
 
 ; Add link shortcuts
 (global-set-key (kbd "C-c l") 'org-store-link)
