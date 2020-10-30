@@ -76,7 +76,7 @@
   (other-window 1)
   (ansi-term (executable-find "bash"))
   )
-(global-key-set (bkd "C-c b") #'ml/bash)
+(global-set-key (kbd "C-c b") #'ml/bash)
 
 ;;
 ;; Basic customization
