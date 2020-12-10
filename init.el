@@ -28,7 +28,9 @@
 (eval-when-compile (require 'use-package))
 
 ;; Theme
-(use-package zenburn-theme
+;; (use-package zenburn-theme
+;;   :ensure t)
+(use-package material-theme
   :ensure t)
 
 ;; Emacs Lisp Python environment
@@ -61,12 +63,21 @@
 (use-package yaml-mode
   :ensure t)
 
+;; Clojure mode
+(use-package clojure-mode
+  :ensure t)
+
 ;; Neotree
 (use-package neotree
   :ensure t
   :init
   (global-set-key [f8] 'neotree-toggle)
   )
+
+;; Colored parenthesis
+(use-package rainbow-delimiters
+  :ensure t
+  :init (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
 
 ;; Interative bash in new window
 (defun ml/bash ()
@@ -77,6 +88,7 @@
   (ansi-term (executable-find "bash"))
   )
 (global-set-key (kbd "C-c b") #'ml/bash)
+
 
 ;;
 ;; Basic customization
@@ -103,11 +115,11 @@
 (setq org-todo-keywords
       '((sequence "TODO" "IN-PROGRESS" "WAITING" "CANCELLED" "DONE"))
       org-todo-keyword-faces
-      '(("TODO" . "red")
+      '(("TODO" . "white")
       ("IN-PROGRESS" . "orange")
-      ("WAITING" . "yellow")
+      ("WAITING" . "red")
       ("CANCELLED" . "black")
-      ("DONE" . "black")))
+      ("DONE" . "green")))
 
 ; Add link shortcuts
 (global-set-key (kbd "C-c l") 'org-store-link)
