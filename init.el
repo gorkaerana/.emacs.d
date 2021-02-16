@@ -9,11 +9,21 @@
 (package-initialize)
 
 ;; Add Melpa archive to list of available repositories
-(setq package-archives '(("org" . "https://orgmode.org/elpa/")
-                         ("stable-melpa" . "https://stable.melpa.org/packages/")
-                         ("melpa" . "https://melpa.org/packages/")
-                         ("gnu" . "https://elpa.gnu.org/packages/")
-                         ; ("marmalade" . "https://marmalade-repo.org/packages/")
+(setq package-archives '(("org"
+			  .
+			  "https://orgmode.org/elpa/")
+                         ("stable-melpa"
+			  .
+			  "https://stable.melpa.org/packages/")
+                         ("melpa"
+			  .
+			  "https://melpa.org/packages/")
+                         ("gnu"
+			  .
+			  "https://elpa.gnu.org/packages/")
+                         ;; ("marmalade"
+			 ;;  .
+			 ;;  "https://marmalade-repo.org/packages/")
                         ))
 
 ;;
@@ -30,8 +40,9 @@
 ;; Theme
 ;; (use-package zenburn-theme
 ;;   :ensure t)
-(use-package material-theme
-  :ensure t)
+;; (use-package material-theme
+;;   :ensure t)
+(load-theme 'material t)
 
 ;; Emacs Lisp Python environment
 (use-package elpy
@@ -78,6 +89,9 @@
 (use-package rainbow-delimiters
   :ensure t
   :init (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
+
+;; Ruler at 80 characters
+(add-hook 'prog-mode-hook #'display-fill-column-indicator-mode)
 
 ;; Interative bash in new window
 (defun ml/bash ()
@@ -126,6 +140,9 @@
 (global-set-key (kbd "C-c C-l") 'org-insert-link)
 (global-set-key (kbd "C-c a") 'org-agenda)
 
+; 
+(setq org-startup-truncated t)
+
 ; Set tag location
 ;(setq org-tags-column -95)
 
@@ -158,5 +175,5 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   (quote
-    (yaml-mode flycheck blacken py-autopep8 elpy zenburn-theme use-package))))
+   '(ligature fira-code-mode fill-column-indicator yaml-mode flycheck blacken py-autopep8 elpy zenburn-theme use-package)))
+
