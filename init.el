@@ -37,6 +37,8 @@
 (require 'use-package)
 (eval-when-compile (require 'use-package))
 
+
+
 ;; Theme
 ;; (use-package zenburn-theme
 ;;   :ensure t)
@@ -88,7 +90,8 @@
 ;; Colored parenthesis
 (use-package rainbow-delimiters
   :ensure t
-  :init (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
+  :init
+  (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
 
 ;; Ruler at 80 characters
 (add-hook 'prog-mode-hook #'display-fill-column-indicator-mode)
@@ -112,6 +115,17 @@
 (global-linum-mode t)            ; Enable line numbers globally
 (setq inhibit-splash-screen t)   ; Hide splash screen
 (setq linum-format "%4d\u2502")  ; Add solid vertical line after line numbering
+
+;; Make copy-pasting normal in Windows
+(if (eq system-type 'windows-nt)
+    (progn
+      (set-clipboard-coding-system 'utf-16-le)
+      (set-selection-coding-system 'utf-16-le))
+  (set-selection-coding-system 'utf-8))
+(setq locale-coding-system 'utf-8)
+(set-terminal-coding-system 'utf-8)
+(set-keyboard-coding-system 'utf-8)
+(prefer-coding-system 'utf-8)
 
 ; Tell emacs where to where my personal elisp lib dir is
 ;(add-to-list 'load-path "~/.emacs.d/lisp/")
@@ -175,5 +189,5 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(ligature fira-code-mode fill-column-indicator yaml-mode flycheck blacken py-autopep8 elpy zenburn-theme use-package)))
+   '(simpleclip ligature fira-code-mode fill-column-indicator yaml-mode flycheck blacken py-autopep8 elpy zenburn-theme use-package)))
 
