@@ -94,7 +94,8 @@
   (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
 
 ;; Ruler at 80 characters
-(add-hook 'prog-mode-hook #'display-fill-column-indicator-mode)
+(if (version< "27.0" emacs-version)
+    (add-hook 'prog-mode-hook #'display-fill-column-indicator-mode))
 
 ;; Interative bash in new window
 (defun ml/bash ()
@@ -111,10 +112,12 @@
 ;; Basic customization
 ;;
 
+(menu-bar-mode -1)               ; Disable menu bar
+(tool-bar-mode -1)                ; Disable tool bar
 (setq inhibit-startup-message t) ; Hide startup message
 (global-linum-mode t)            ; Enable line numbers globally
 (setq inhibit-splash-screen t)   ; Hide splash screen
-(setq linum-format "%4d\u2502")  ; Add solid vertical line after line numbering
+(setq linum-format "%4d\u2502")  ; Line numbering  & solid vertical bar
 
 ;; Make copy-pasting normal in Windows
 (if (eq system-type 'windows-nt)
@@ -190,4 +193,3 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    '(simpleclip ligature fira-code-mode fill-column-indicator yaml-mode flycheck blacken py-autopep8 elpy zenburn-theme use-package)))
-
