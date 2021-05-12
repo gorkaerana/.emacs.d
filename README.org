@@ -1,4 +1,4 @@
-#+TITLE: Literate emacs init
+t#+TITLE: Literate emacs init
 #+AUTHOR: Gorka Eraña
 #+EMAIL: eranagorka@gmail.com
 #+DATE: <2021-05-12 Wed>
@@ -176,6 +176,10 @@ Binds a specific configuration of ~ansi-term~ to "C-c b". I don't much fancy how
     (ansi-term (executable-find "bash")))
   (global-set-key (kbd "C-c b") #'ml/bash)
 #+end_src
+** [[https://magit.vc/][Magit]]
+#+begin_src emacs-lisp
+  (use-package magit :ensure t)
+#+end_src
 * Miscellaneous
 ** Normal copy-pasting in Windows
 I believe copy-pasting (in the Emacs sense of it) stopped to working with Emacs 27. The following code block fixes it.
@@ -189,4 +193,10 @@ I believe copy-pasting (in the Emacs sense of it) stopped to working with Emacs 
   (set-terminal-coding-system 'utf-8)
   (set-keyboard-coding-system 'utf-8)
   (prefer-coding-system 'utf-8)
+#+end_src
+** [[https://github.com/snosov1/toc-org][toc-org]]
+*** TODO. Use it so that the table of contents for the Github README is generated automatically upon save.
+** asd
+#+begin_src emacs-lisp
+  (setq markdown-fontify-code-blocks-natively t)
 #+end_src

@@ -1,39 +1,44 @@
 
 # Table of Contents
 
-1.  [Preface](#org9cac999)
-    1.  [Package infrastructure initialization](#org151e79d)
-    2.  [Set-up `use-package`](#orgb1f5c27)
-2.  [Aesthetics](#org8bf07bc)
-    1.  [Theme](#org289f701)
-    2.  [Font](#org8274b02)
-    3.  [Rainbow delimiters](#orga14ceb3)
-    4.  [Ruler at 80 characters](#org3afa5f9)
-    5.  [Miscellaneous](#org061f97e)
-3.  [Org Mode](#orgff5d0a0)
-    1.  [Setup](#org323bde1)
-4.  [Python IDE packages](#orgdbf9e2c)
-    1.  [Elpy](#orgf0a07e0)
-    2.  [py-autopep8](#orgef9afa4)
-    3.  [Blacken](#orgbf057a3)
-    4.  [Flycheck](#orge8f83fd)
-5.  [Various IDE packages](#org1d38dc1)
-    1.  [yaml-mode](#org3b6370b)
-    2.  [Clojure mode](#org589a2f2)
-    3.  [emacs-neotree](#org02d1590)
-    4.  [Terminal emulator](#org7f6d63f)
-6.  [Miscellaneous](#org6b0fd59)
-    1.  [Normal copy-pasting in Windows](#org6e97787)
+1.  [Preface](#org61734fa)
+    1.  [Package infrastructure initialization](#org59543c7)
+    2.  [Set-up `use-package`](#org22a3e4e)
+2.  [Aesthetics](#org4348b8e)
+    1.  [Theme](#org640a55f)
+    2.  [Font](#org851bebc)
+    3.  [Rainbow delimiters](#org037d448)
+    4.  [Ruler at 80 characters](#orgc84dece)
+    5.  [Miscellaneous](#org9330487)
+3.  [Org Mode](#org29807a2)
+    1.  [Setup](#org03fec51)
+4.  [Python IDE packages](#orgf3e6d32)
+    1.  [Elpy](#orge32096e)
+    2.  [py-autopep8](#org8b3bd60)
+    3.  [Blacken](#orge2dcdc7)
+    4.  [Flycheck](#org9cc88f9)
+5.  [Various IDE packages](#orgf98775b)
+    1.  [yaml-mode](#orgc950010)
+    2.  [Clojure mode](#orgadcf9c8)
+    3.  [emacs-neotree](#orgc63c904)
+    4.  [Terminal emulator](#orge0bcd5c)
+    5.  [Magit](#org733d088)
+6.  [Miscellaneous](#orgd1c4137)
+    1.  [Normal copy-pasting in Windows](#orgde07429)
+    2.  [toc-org](#org496e855)
+    3.  [asd](#orgea9e538)
+
+t#+TITLE: Literate emacs init
 
 Create `init.el` by tangling the contents of the code blocks: "C-c C-v t" (`org-babel-tangle`). Furthermore, it is worth exporting the current file in markdown to create a beautiful README for Github: "C-c C-e m m" (`org-md-export-to-markdown`).
 
 
-<a id="org9cac999"></a>
+<a id="org61734fa"></a>
 
 # Preface
 
 
-<a id="org151e79d"></a>
+<a id="org59543c7"></a>
 
 ## Package infrastructure initialization
 
@@ -59,7 +64,7 @@ Create `init.el` by tangling the contents of the code blocks: "C-c C-v t" (`org-
     			))
 
 
-<a id="orgb1f5c27"></a>
+<a id="org22a3e4e"></a>
 
 ## Set-up `use-package`
 
@@ -70,12 +75,12 @@ Create `init.el` by tangling the contents of the code blocks: "C-c C-v t" (`org-
     (eval-when-compile (require 'use-package))
 
 
-<a id="org8bf07bc"></a>
+<a id="org4348b8e"></a>
 
 # Aesthetics
 
 
-<a id="org289f701"></a>
+<a id="org640a55f"></a>
 
 ## Theme
 
@@ -86,7 +91,7 @@ I still haven't been able to figure out when to use `use-package` or `load-theme
       :config (load-theme 'material t))
 
 
-<a id="org8274b02"></a>
+<a id="org851bebc"></a>
 
 ## Font
 
@@ -96,7 +101,7 @@ Absolutely always [Hack](https://sourcefoundry.org/hack/).
      '(default ((t (:height 160 :family "Hack")))))
 
 
-<a id="orga14ceb3"></a>
+<a id="org037d448"></a>
 
 ## Rainbow delimiters
 
@@ -105,7 +110,7 @@ Absolutely always [Hack](https://sourcefoundry.org/hack/).
       :init (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
 
 
-<a id="org3afa5f9"></a>
+<a id="orgc84dece"></a>
 
 ## Ruler at 80 characters
 
@@ -115,7 +120,7 @@ Absolutely always [Hack](https://sourcefoundry.org/hack/).
         (add-hook 'prog-mode-hook #'display-fill-column-indicator-mode))
 
 
-<a id="org061f97e"></a>
+<a id="org9330487"></a>
 
 ## Miscellaneous
 
@@ -138,12 +143,12 @@ Hide splash screen.
 Enable line numbers globally, format them, and add a solid vertical bar.
 
 
-<a id="orgff5d0a0"></a>
+<a id="org29807a2"></a>
 
 # Org Mode
 
 
-<a id="org323bde1"></a>
+<a id="org03fec51"></a>
 
 ## Setup
 
@@ -170,12 +175,12 @@ Enable line numbers globally, format them, and add a solid vertical bar.
       (global-set-key (kbd "C-c a") 'org-agenda))
 
 
-<a id="orgdbf9e2c"></a>
+<a id="orgf3e6d32"></a>
 
 # Python IDE packages
 
 
-<a id="orgf0a07e0"></a>
+<a id="orge32096e"></a>
 
 ## [Elpy](https://github.com/jorgenschaefer/elpy)
 
@@ -186,7 +191,7 @@ Emacs Python IDE, which I'm pretty sure I don't use it to its full extent.
       :init (elpy-enable))
 
 
-<a id="orgef9afa4"></a>
+<a id="org8b3bd60"></a>
 
 ## [py-autopep8](https://github.com/paetzke/py-autopep8.el)
 
@@ -197,7 +202,7 @@ Code formatting according to [PEP 8](https://www.python.org/dev/peps/pep-0008/) 
       :init (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save))
 
 
-<a id="orgbf057a3"></a>
+<a id="orge2dcdc7"></a>
 
 ## [Blacken](https://github.com/pythonic-emacs/blacken)
 
@@ -208,7 +213,7 @@ Code formatting according by [black](https://github.com/psf/black).
       :init 'blacken-mode)
 
 
-<a id="orge8f83fd"></a>
+<a id="org9cc88f9"></a>
 
 ## [Flycheck](https://www.flycheck.org/en/latest/)
 
@@ -222,26 +227,26 @@ Flycheck is not exclusive to Python, but it is set up only for it since I mainly
         (add-hook 'elpy-mode-hook 'flycheck-mode)))
 
 
-<a id="org1d38dc1"></a>
+<a id="orgf98775b"></a>
 
 # Various IDE packages
 
 
-<a id="org3b6370b"></a>
+<a id="orgc950010"></a>
 
 ## [yaml-mode](https://github.com/yoshiki/yaml-mode)
 
     (use-package yaml-mode :ensure t)
 
 
-<a id="org589a2f2"></a>
+<a id="orgadcf9c8"></a>
 
 ## [Clojure mode](https://github.com/clojure-emacs/clojure-mode/)
 
     (use-package clojure-mode :ensure t)
 
 
-<a id="org02d1590"></a>
+<a id="orgc63c904"></a>
 
 ## [emacs-neotree](https://github.com/jaypei/emacs-neotree)
 
@@ -252,7 +257,7 @@ Flycheck is not exclusive to Python, but it is set up only for it since I mainly
       (setq-default neo-show-hidden-files t))
 
 
-<a id="org7f6d63f"></a>
+<a id="orge0bcd5c"></a>
 
 ## Terminal emulator
 
@@ -267,12 +272,19 @@ Binds a specific configuration of `ansi-term` to "C-c b". I don't much fancy how
     (global-set-key (kbd "C-c b") #'ml/bash)
 
 
-<a id="org6b0fd59"></a>
+<a id="org733d088"></a>
+
+## [Magit](https://magit.vc/)
+
+    (use-package magit :ensure t)
+
+
+<a id="orgd1c4137"></a>
 
 # Miscellaneous
 
 
-<a id="org6e97787"></a>
+<a id="orgde07429"></a>
 
 ## Normal copy-pasting in Windows
 
@@ -287,4 +299,19 @@ I believe copy-pasting (in the Emacs sense of it) stopped to working with Emacs 
     (set-terminal-coding-system 'utf-8)
     (set-keyboard-coding-system 'utf-8)
     (prefer-coding-system 'utf-8)
+
+
+<a id="org496e855"></a>
+
+## [toc-org](https://github.com/snosov1/toc-org)
+
+
+### TODO. Use it so that the table of contents for the Github README is generated automatically upon save.
+
+
+<a id="orgea9e538"></a>
+
+## asd
+
+    (setq markdown-fontify-code-blocks-natively t)
 
