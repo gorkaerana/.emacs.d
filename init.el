@@ -47,7 +47,8 @@
 
 (setq inhibit-splash-screen t)
 
-
+(global-linum-mode t)
+(setq linum-format "%4d\u2502")
 
 (use-package org
   :ensure t
@@ -119,5 +120,3 @@
 (set-terminal-coding-system 'utf-8)
 (set-keyboard-coding-system 'utf-8)
 (prefer-coding-system 'utf-8)
-
-(setq markdown-fontify-code-blocks-natively t)

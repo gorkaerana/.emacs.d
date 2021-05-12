@@ -1,4 +1,4 @@
-t#+TITLE: Literate emacs init
+#+TITLE: Literate emacs init
 #+AUTHOR: Gorka Eraña
 #+EMAIL: eranagorka@gmail.com
 #+DATE: <2021-05-12 Wed>
@@ -90,6 +90,8 @@ Hide splash screen.
 
 Enable line numbers globally, format them, and add a solid vertical bar.
 #+begin_src emacs-lisp
+  (global-linum-mode t)
+  (setq linum-format "%4d\u2502")
 #+end_src
 * Org Mode
 ** Setup
@@ -195,8 +197,4 @@ I believe copy-pasting (in the Emacs sense of it) stopped to working with Emacs 
   (prefer-coding-system 'utf-8)
 #+end_src
 ** [[https://github.com/snosov1/toc-org][toc-org]]
-*** TODO. Use it so that the table of contents for the Github README is generated automatically upon save.
-** asd
-#+begin_src emacs-lisp
-  (setq markdown-fontify-code-blocks-natively t)
-#+end_src
+*** TODO: use it so that the table of contents for the Github README is generated automatically upon save.
