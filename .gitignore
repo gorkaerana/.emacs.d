@@ -6,3 +6,4 @@ elpy/
 list/
 snippets/
 themes/
+*.data
