@@ -54,6 +54,7 @@
   :mode ("\\.org$" . org-mode)
   :config
   (setq org-startup-truncated t)
+  ;; Custom todo keyword sequence and colours
   (setq org-todo-keywords '((sequence
                             "TODO"
                             "IN-PROGRESS"
