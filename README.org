@@ -7,6 +7,8 @@
 #+PROPERTY: header-args :results silent :tangle "./init.el"
 #+OPTIONS: toc:2
 
+Create ~init.el~ by tangling the contents of the code blocks: "C-c C-v t" (~org-babel-tangle~). Furthermore, it is worth exporting the current file in markdown to create a beautiful README for Github: "C-c C-e m m" (~org-md-export-to-markdown~).
+
 * Preface
 ** Package infrastructure initialization
 #+begin_src emacs-lisp
@@ -41,14 +43,14 @@
 #+end_src
 * Aesthetics
 ** Theme
-I still haven't been able to figure out when to use ~use-package~ or ~load-theme~ in this context
+I still haven't been able to figure out when to use ~use-package~ or ~load-theme~ in this context.
 #+begin_src emacs-lisp
     (use-package material-theme
       :ensure t
       :config (load-theme 'material t))
 #+end_src
 ** Font
-Absolutely always [[https://sourcefoundry.org/hack/][Hack]]
+Absolutely always [[https://sourcefoundry.org/hack/][Hack]].
 #+begin_src emacs-lisp
   (custom-set-faces
    '(default ((t (:height 160 :family "Hack")))))
@@ -66,27 +68,27 @@ Absolutely always [[https://sourcefoundry.org/hack/][Hack]]
       (add-hook 'prog-mode-hook #'display-fill-column-indicator-mode))
 #+end_src
 ** Miscellaneous
-Disable menu bar
+Disable menu bar.
 #+begin_src emacs-lisp
   (setq menu-bar-mode -1)
 #+end_src
 
-Disable tool bar
+Disable tool bar.
 #+begin_src emacs-lisp
   (setq tool-bar-mode -1)
 #+end_src
 
-Hide startup message
+Hide startup message.
 #+begin_src emacs-lisp
   (setq inhibit-startup-message t)
 #+end_src
 
-Hide splash screen
+Hide splash screen.
 #+begin_src emacs-lisp
   (setq inhibit-splash-screen t)
 #+end_src
 
-Enable line numbers globally, format them, and add a solid vertical bar
+Enable line numbers globally, format them, and add a solid vertical bar.
 #+begin_src emacs-lisp
 #+end_src
 * Org Mode
@@ -97,6 +99,7 @@ Enable line numbers globally, format them, and add a solid vertical bar
     :mode ("\\.org$" . org-mode)
     :config
     (setq org-startup-truncated t)
+    ;; Custom todo keyword sequence and colours
     (setq org-todo-keywords '((sequence
                               "TODO"
                               "IN-PROGRESS"
@@ -122,7 +125,7 @@ Emacs Python IDE, which I'm pretty sure I don't use it to its full extent.
     :init (elpy-enable))
 #+end_src
 ** [[https://github.com/paetzke/py-autopep8.el][py-autopep8]]
-Code formatting according to [[https://www.python.org/dev/peps/pep-0008/][PEP 8]] upon save
+Code formatting according to [[https://www.python.org/dev/peps/pep-0008/][PEP 8]] upon save.
 #+begin_src emacs-lisp
   (use-package py-autopep8
     :ensure t
