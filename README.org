@@ -9,16 +9,35 @@
 
 * Table of contents
 :PROPERTIES:
-:TOC:      :include all :depth 2 :force (depth) :ignore (nothing) :local (depth)
+:TOC:      :include all :depth 2
 :END:
 :CONTENTS:
 - [[#table-of-contents][Table of contents]]
 - [[#preface][Preface]]
+  - [[#package-infrastructure-initialization][Package infrastructure initialization]]
+  - [[#set-up-use-package][Set-up use-package]]
 - [[#aesthetics][Aesthetics]]
+  - [[#theme][Theme]]
+  - [[#font][Font]]
+  - [[#rainbow-delimiters][Rainbow delimiters]]
+  - [[#ruler-at-80-characters][Ruler at 80 characters]]
+  - [[#miscellaneous][Miscellaneous]]
 - [[#org-mode][Org Mode]]
+  - [[#setup][Setup]]
 - [[#python-ide-packages][Python IDE packages]]
+  - [[#elpy][Elpy]]
+  - [[#py-autopep8][py-autopep8]]
+  - [[#blacken][Blacken]]
+  - [[#flycheck][Flycheck]]
 - [[#various-ide-packages][Various IDE packages]]
+  - [[#yaml-mode][yaml-mode]]
+  - [[#clojure-mode][Clojure mode]]
+  - [[#emacs-neotree][emacs-neotree]]
+  - [[#terminal-emulator][Terminal emulator]]
+  - [[#magit][Magit]]
 - [[#miscellaneous][Miscellaneous]]
+  - [[#normal-copy-pasting-in-windows][Normal copy-pasting in Windows]]
+  - [[#toc-org][toc-org]]
 :END:
 
 * Preface
