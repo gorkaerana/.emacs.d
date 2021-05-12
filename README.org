@@ -7,6 +7,8 @@
 #+PROPERTY: header-args :results silent :tangle "./init.el"
 #+OPTIONS: toc:2
 
+:TOC_2_gh:
+
 Create ~init.el~ by tangling the contents of the code blocks: "C-c C-v t" (~org-babel-tangle~). Furthermore, it is worth exporting the current file in markdown to create a beautiful README for Github: "C-c C-e m m" (~org-md-export-to-markdown~).
 
 * Preface
@@ -197,4 +199,15 @@ I believe copy-pasting (in the Emacs sense of it) stopped to working with Emacs 
   (prefer-coding-system 'utf-8)
 #+end_src
 ** [[https://github.com/snosov1/toc-org][toc-org]]
-*** TODO: use it so that the table of contents for the Github README is generated automatically upon save.
+TODO: use it so that the table of contents for the Github README is generated automatically upon save.
+#+begin_src emacs-lisp
+(use-package toc-org
+  :ensure t
+  :defer t
+  :config
+  (add-hook 'org-mode-hook 'toc-org-mode)
+  ;; enable in markdown, too
+  (add-hook 'markdown-mode-hook 'toc-org-mode)
+  (define-key markdown-mode-map (kbd "\C-c\C-o") 'toc-org-markdown-follow-thing-at-point)
+  )
+#+end_src
