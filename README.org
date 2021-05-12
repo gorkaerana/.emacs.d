@@ -92,7 +92,26 @@ Enable line numbers globally, format them, and add a solid vertical bar
 * Org Mode
 ** Setup
 #+begin_src emacs-lisp
-
+  (use-package org
+    :ensure t
+    :mode ("\\.org$" . org-mode)
+    :config
+    (setq org-startup-truncated t)
+    (setq org-todo-keywords '((sequence
+                              "TODO"
+                              "IN-PROGRESS"
+                              "WAITING"
+                              "CANCELLED"
+                              "DONE"))
+          org-todo-keyword-faces '(("TODO" . "white")
+                                   ("IN-PROGRESS" . "orange")
+                                   ("WAITING" . "red")
+                                   ("CANCELLED" . "black")
+                                   ("DONE" . "green")))
+    ;; Linking shortcuts
+    (global-set-key (kbd "C-c l") 'org-store-link)
+    (global-set-key (kbd "C-c C-l") 'org-insert-link)
+    (global-set-key (kbd "C-c a") 'org-agenda))
 #+end_src
 * Python IDE packages
 ** [[https://github.com/jorgenschaefer/elpy][Elpy]]

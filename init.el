@@ -17,9 +17,6 @@
                          ("gnu"
                           .
                           "https://elpa.gnu.org/packages/")
-                         ("marmalade"
-                          .
-                          "https://marmalade-repo.org/packages/")
                         ))
 
 (unless (package-installed-p 'use-package)
@@ -28,9 +25,9 @@
 (require 'use-package)
 (eval-when-compile (require 'use-package))
 
-;; (use-package material-theme
-;;   :ensure t)
-(load-theme 'material t)
+(use-package material-theme
+  :ensure t
+  :config (load-theme 'material t))
 
 (custom-set-faces
  '(default ((t (:height 160 :family "Hack")))))
@@ -52,7 +49,26 @@
 
 
 
-
+(use-package org
+  :ensure t
+  :mode ("\\.org$" . org-mode)
+  :config
+  (setq org-startup-truncated t)
+  (setq org-todo-keywords '((sequence
+                            "TODO"
+                            "IN-PROGRESS"
+                            "WAITING"
+                            "CANCELLED"
+                            "DONE"))
+        org-todo-keyword-faces '(("TODO" . "white")
+                                 ("IN-PROGRESS" . "orange")
+                                 ("WAITING" . "red")
+                                 ("CANCELLED" . "black")
+                                 ("DONE" . "green")))
+  ;; Linking shortcuts
+  (global-set-key (kbd "C-c l") 'org-store-link)
+  (global-set-key (kbd "C-c C-l") 'org-insert-link)
+  (global-set-key (kbd "C-c a") 'org-agenda))
 
 (use-package elpy
   :ensure t
