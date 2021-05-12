@@ -7,11 +7,9 @@
 #+PROPERTY: header-args :results silent :tangle "./init.el"
 #+OPTIONS: toc:2
 
-:TOC_2_gh:
-
-Create ~init.el~ by tangling the contents of the code blocks: "C-c C-v t" (~org-babel-tangle~). Furthermore, it is worth exporting the current file in markdown to create a beautiful README for Github: "C-c C-e m m" (~org-md-export-to-markdown~).
-
+* Table of contents                                                :TOG_2_gh:
 * Preface
+Create ~init.el~ by tangling the contents of the code blocks: "C-c C-v t" (~org-babel-tangle~). Furthermore, it is worth exporting the current file in markdown to create a beautiful README for Github: "C-c C-e m m" (~org-md-export-to-markdown~).
 ** Package infrastructure initialization
 #+begin_src emacs-lisp
   ;; Enables basic package supporting
