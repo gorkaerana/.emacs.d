@@ -37,7 +37,7 @@
   - [[#magit][Magit]]
 - [[#miscellaneous][Miscellaneous]]
   - [[#normal-copy-pasting-in-windows][Normal copy-pasting in Windows]]
-  - [[#toc-org][toc-org]]
+  - [[#org-make-toc][org-make-toc]]
 :END:
 * Preface
 Create ~init.el~ by tangling the contents of the code blocks: "C-c C-v t" (~org-babel-tangle~).
