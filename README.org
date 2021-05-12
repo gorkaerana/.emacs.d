@@ -1,0 +1,171 @@
+ #+TITLE: Literate emacs init
+#+AUTHOR: Gorka Eraña
+#+EMAIL: eranagorka@gmail.com
+#+DATE: <2021-05-12 Wed>
+#+CREATED: 2021-05-12
+#+STARTUP: hidestars indent
+#+PROPERTY: header-args :results silent :tangle "./init.el"
+
+* Preface
+** Package infrastructure initialization
+#+begin_src emacs-lisp
+  ;; Enables basic package supporting
+  (require 'package)
+
+  ;; Initialize the package infrastructure
+  (package-initialize)
+
+  ;; Add several archives to list of available repositories
+  (setq package-archives '(("org"
+                            .
+                            "https://orgmode.org/elpa/")
+                           ("stable-melpa"
+                            .
+                            "https://stable.melpa.org/packages/")
+                           ("melpa"
+                            .
+                            "https://melpa.org/packages/")
+                           ("gnu"
+                            .
+                            "https://elpa.gnu.org/packages/")
+                           ("marmalade"
+                            .
+                            "https://marmalade-repo.org/packages/")
+                          ))
+#+end_src
+** Set-up ~use-package~
+#+begin_src emacs-lisp
+  (unless (package-installed-p 'use-package)
+    (package-refresh-contents)
+    (package-install 'use-package))
+  (require 'use-package)
+  (eval-when-compile (require 'use-package))
+#+end_src
+* Aesthetics
+** Theme
+I still haven't been able to figure out when to use ~use-package~ or ~load-theme~ in this context
+#+begin_src emacs-lisp
+  ;; (use-package material-theme
+  ;;   :ensure t)
+  (load-theme 'material t)
+#+end_src
+** Font
+Absolutely always [[https://sourcefoundry.org/hack/][Hack]]
+#+begin_src emacs-lisp
+  (custom-set-faces
+   '(default ((t (:height 160 :family "Hack")))))
+#+end_src
+** Rainbow delimiters
+#+begin_src emacs-lisp
+  (use-package rainbow-delimiters
+    :ensure t
+    :init (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
+#+end_src
+** Ruler at 80 characters
+~display-fill-column-indicator-mode~ was introduced with Emacs 27, so the version ought to be checked before adding the hook.
+#+begin_src emacs-lisp
+  (if (version< "27.0" emacs-version)
+      (add-hook 'prog-mode-hook #'display-fill-column-indicator-mode))
+#+end_src
+** Miscellaneous
+Disable menu bar
+#+begin_src emacs-lisp
+  (setq menu-bar-mode -1)
+#+end_src
+
+Disable tool bar
+#+begin_src emacs-lisp
+  (setq tool-bar-mode -1)
+#+end_src
+
+Hide startup message
+#+begin_src emacs-lisp
+  (setq inhibit-startup-message t)
+#+end_src
+
+Hide splash screen
+#+begin_src emacs-lisp
+  (setq inhibit-splash-screen t)
+#+end_src
+
+Enable line numbers globally, format them, and add a solid vertical bar
+#+begin_src emacs-lisp
+#+end_src
+* Org Mode
+** Setup
+#+begin_src emacs-lisp
+#+end_src
+* Python IDE packages
+** [[https://github.com/jorgenschaefer/elpy][Elpy]]
+Emacs Python IDE, which I'm pretty sure I don't use it to its full extent.
+#+begin_src emacs-lisp
+  (use-package elpy
+    :ensure t
+    :init (elpy-enable))
+#+end_src
+** [[https://github.com/paetzke/py-autopep8.el][py-autopep8]]
+Code formatting according to [[https://www.python.org/dev/peps/pep-0008/][PEP 8]] upon save
+#+begin_src emacs-lisp
+  (use-package py-autopep8
+    :ensure t
+    :init (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save))
+#+end_src
+** [[https://github.com/pythonic-emacs/blacken][Blacken]]
+Code formatting according by [[https://github.com/psf/black][black]].
+#+begin_src emacs-lisp
+  (use-package blacken
+    :ensure t
+    :init 'blacken-mode)
+#+end_src
+** [[https://www.flycheck.org/en/latest/][Flycheck]]
+Flycheck is not exclusive to Python, but it is set up only for it since I mainly develop in Python.
+#+begin_src emacs-lisp
+  (use-package flycheck
+    :ensure t
+    :init
+    (when (require 'flycheck nil t)
+      (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
+      (add-hook 'elpy-mode-hook 'flycheck-mode)))
+#+end_src
+* Various IDE packages
+** [[https://github.com/yoshiki/yaml-mode][yaml-mode]]
+#+begin_src emacs-lisp
+  (use-package yaml-mode :ensure t)
+#+end_src
+** [[https://github.com/clojure-emacs/clojure-mode/][Clojure mode]]
+#+begin_src emacs-lisp
+  (use-package clojure-mode :ensure t)
+#+end_src
+** [[https://github.com/jaypei/emacs-neotree][emacs-neotree]]
+#+begin_src emacs-lisp
+  (use-package neotree
+    :ensure t
+    :init
+    (global-set-key [f8] 'neotree-toggle)
+    (setq-default neo-show-hidden-files t))
+#+end_src
+** Terminal emulator
+Binds a specific configuration of ~ansi-term~ to "C-c b". I don't much fancy how the windows are splitted. [[https://github.com/akermu/emacs-libvterm][emacs-libvterm]] might be a worthy replacement.
+#+begin_src emacs-lisp
+  (defun ml/bash ()
+    "Start a terminal emulator in a new window"
+    (interactive)
+    (split-window-sensibly)
+    (other-window 1)
+    (ansi-term (executable-find "bash")))
+  (global-set-key (kbd "C-c b") #'ml/bash)
+#+end_src
+* Miscellaneous
+** Normal copy-pasting in Windows
+I believe copy-pasting (in the Emacs sense of it) stopped to working with Emacs 27. The following code block fixes it.
+#+begin_src emacs-lisp
+  (if (eq system-type 'windows-nt)
+      (progn
+        (set-clipboard-coding-system 'utf-16-le)
+        (set-selection-coding-system 'utf-16-le))
+    (set-selection-coding-system 'utf-8))
+  (setq locale-coding-system 'utf-8)
+  (set-terminal-coding-system 'utf-8)
+  (set-keyboard-coding-system 'utf-8)
+  (prefer-coding-system 'utf-8)
+#+end_src

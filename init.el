@@ -1,125 +1,96 @@
-;;
-;; MELPA Package Support
-;;
-
 ;; Enables basic package supporting
 (require 'package)
 
 ;; Initialize the package infrastructure
 (package-initialize)
 
-;; Add Melpa archive to list of available repositories
+;; Add several archives to list of available repositories
 (setq package-archives '(("org"
-			  .
-			  "https://orgmode.org/elpa/")
+                          .
+                          "https://orgmode.org/elpa/")
                          ("stable-melpa"
-			  .
-			  "https://stable.melpa.org/packages/")
+                          .
+                          "https://stable.melpa.org/packages/")
                          ("melpa"
-			  .
-			  "https://melpa.org/packages/")
+                          .
+                          "https://melpa.org/packages/")
                          ("gnu"
-			  .
-			  "https://elpa.gnu.org/packages/")
-                         ;; ("marmalade"
-			 ;;  .
-			 ;;  "https://marmalade-repo.org/packages/")
+                          .
+                          "https://elpa.gnu.org/packages/")
+                         ("marmalade"
+                          .
+                          "https://marmalade-repo.org/packages/")
                         ))
 
-;;
-;; Ensure package usage with use-packages
-;; 
-
-;; make sure use-package is installed
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
   (package-install 'use-package))
 (require 'use-package)
 (eval-when-compile (require 'use-package))
 
-
-
-;; Theme
-;; (use-package zenburn-theme
-;;   :ensure t)
 ;; (use-package material-theme
 ;;   :ensure t)
 (load-theme 'material t)
 
-;; Emacs Lisp Python environment
+(custom-set-faces
+ '(default ((t (:height 160 :family "Hack")))))
+
+(use-package rainbow-delimiters
+  :ensure t
+  :init (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
+
+(if (version< "27.0" emacs-version)
+    (add-hook 'prog-mode-hook #'display-fill-column-indicator-mode))
+
+(setq menu-bar-mode -1)
+
+(setq tool-bar-mode -1)
+
+(setq inhibit-startup-message t)
+
+(setq inhibit-splash-screen t)
+
+
+
+
+
 (use-package elpy
   :ensure t
-  :init
-  (elpy-enable)
-  )
+  :init (elpy-enable))
 
-;; pep8 formatting on save
 (use-package py-autopep8
   :ensure t
-  :init
-  (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save))
+  :init (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save))
 
-;; black formatting on save
 (use-package blacken
-  :ensure t)
+  :ensure t
+  :init 'blacken-mode)
 
-;; On the fly syntax check
 (use-package flycheck
   :ensure t
   :init
   (when (require 'flycheck nil t)
     (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
-    (add-hook 'elpy-mode-hook 'flycheck-mode))
-  )
+    (add-hook 'elpy-mode-hook 'flycheck-mode)))
 
-;; Yaml mode
-(use-package yaml-mode
-  :ensure t)
+(use-package yaml-mode :ensure t)
 
-;; Clojure mode
-(use-package clojure-mode
-  :ensure t)
+(use-package clojure-mode :ensure t)
 
-;; Neotree
 (use-package neotree
   :ensure t
   :init
   (global-set-key [f8] 'neotree-toggle)
-  )
+  (setq-default neo-show-hidden-files t))
 
-;; Colored parenthesis
-(use-package rainbow-delimiters
-  :ensure t
-  :init
-  (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
-
-;; Ruler at 80 characters
-(if (version< "27.0" emacs-version)
-    (add-hook 'prog-mode-hook #'display-fill-column-indicator-mode))
-
-;; Interative bash in new window
 (defun ml/bash ()
   "Start a terminal emulator in a new window"
   (interactive)
   (split-window-sensibly)
   (other-window 1)
-  (ansi-term (executable-find "bash"))
-  )
+  (ansi-term (executable-find "bash")))
 (global-set-key (kbd "C-c b") #'ml/bash)
 
-
-;;
-;; Basic customization
-;;
-
-(menu-bar-mode -1)               ; Disable menu bar
-(tool-bar-mode -1)                ; Disable tool bar
-(setq inhibit-startup-message t) ; Hide startup message
-(global-linum-mode t)            ; Enable line numbers globally
-(setq inhibit-splash-screen t)   ; Hide splash screen
-(setq linum-format "%4d\u2502")  ; Line numbering  & solid vertical bar
-
-;; Make copy-pasting normal in Windows
 (if (eq system-type 'windows-nt)
     (progn
       (set-clipboard-coding-system 'utf-16-le)
@@ -129,67 +100,3 @@
 (set-terminal-coding-system 'utf-8)
 (set-keyboard-coding-system 'utf-8)
 (prefer-coding-system 'utf-8)
-
-; Tell emacs where to where my personal elisp lib dir is
-;(add-to-list 'load-path "~/.emacs.d/lisp/")
-
-;;;;;;;;;;;;;;;;;;
-;;;; Org mode ;;;;
-;;;;;;;;;;;;;;;;;;
-
-(require 'org)
-
-; Make org-mode work with files ending in .org
-(add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
-
-; Set org todo keywords
-(setq org-todo-keywords
-      '((sequence "TODO" "IN-PROGRESS" "WAITING" "CANCELLED" "DONE"))
-      org-todo-keyword-faces
-      '(("TODO" . "white")
-      ("IN-PROGRESS" . "orange")
-      ("WAITING" . "red")
-      ("CANCELLED" . "black")
-      ("DONE" . "green")))
-
-; Add link shortcuts
-(global-set-key (kbd "C-c l") 'org-store-link)
-(global-set-key (kbd "C-c C-l") 'org-insert-link)
-(global-set-key (kbd "C-c a") 'org-agenda)
-
-; 
-(setq org-startup-truncated t)
-
-; Set tag location
-;(setq org-tags-column -95)
-
-; Set agenda mode to read all org files
-;(setq org-agenda-files (list "~/../../Dropbox/emacs/work/client_projects/"))
-
-;(setq org-agenda-skip-scheduled-if-done t)
-
-; Agenda mode splits vertically
-;(defadvice org-agenda (around split-vertically activate)
-;  (let ((split-width-threshold 50))  ; or whatever width makes sense for you
-;    ad-do-it))
-
-;;;;;;;;;;;;;;;;;;;;
-;;;; Appearance ;;;;
-;;;;;;;;;;;;;;;;;;;;
-
-; Change default font to 16 point Consolas
-;(set-face-font 'default "Hack")
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(default ((t (:height 160 :family "Hack")))))
-
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   '(simpleclip ligature fira-code-mode fill-column-indicator yaml-mode flycheck blacken py-autopep8 elpy zenburn-theme use-package)))
