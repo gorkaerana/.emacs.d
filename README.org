@@ -39,9 +39,8 @@
   - [[#normal-copy-pasting-in-windows][Normal copy-pasting in Windows]]
   - [[#toc-org][toc-org]]
 :END:
-
 * Preface
-Create ~init.el~ by tangling the contents of the code blocks: "C-c C-v t" (~org-babel-tangle~). Furthermore, it is worth exporting the current file in markdown to create a beautiful README for Github: "C-c C-e m m" (~org-md-export-to-markdown~).
+Create ~init.el~ by tangling the contents of the code blocks: "C-c C-v t" (~org-babel-tangle~).
 ** Package infrastructure initialization
 #+begin_src emacs-lisp
   ;; Enables basic package supporting
@@ -228,17 +227,8 @@ I believe copy-pasting (in the Emacs sense of it) stopped to working with Emacs 
   (set-keyboard-coding-system 'utf-8)
   (prefer-coding-system 'utf-8)
 #+end_src
-** [[https://github.com/snosov1/toc-org][toc-org]]
-TODO: use it so that the table of contents for the Github README is generated automatically upon save.
+** [[https://github.com/alphapapa/org-make-toc][org-make-toc]]
+"Usage" section in the README of the link above describes well how to use this package. Nevertheless, after running ~org-make-toc-insert~ I had to remove all TOC properties but ~:include all~ and ~:depth 2~ to customize the table of contents to my liking.
 #+begin_src emacs-lisp
-  ;; (use-package toc-org
-  ;;   :ensure t
-  ;;   :defer t
-  ;;   :config
-  ;;   (add-hook 'org-mode-hook 'toc-org-mode)
-  ;;   ;; enable in markdown, too
-  ;;   (add-hook 'markdown-mode-hook 'toc-org-mode)
-  ;;   (define-key markdown-mode-map (kbd "\C-c\C-o") 'toc-org-markdown-follow-thing-at-point)
-  ;;   )
   (use-package org-make-toc :ensure t)
 #+end_src
