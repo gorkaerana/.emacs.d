@@ -1,10 +1,11 @@
- #+TITLE: Literate emacs init
+#+TITLE: Literate emacs init
 #+AUTHOR: Gorka Eraña
 #+EMAIL: eranagorka@gmail.com
 #+DATE: <2021-05-12 Wed>
 #+CREATED: 2021-05-12
-#+STARTUP: hidestars indent
+#+STARTUP: hidestars indent overview
 #+PROPERTY: header-args :results silent :tangle "./init.el"
+#+OPTIONS: toc:2
 
 * Preface
 ** Package infrastructure initialization
@@ -28,9 +29,6 @@
                            ("gnu"
                             .
                             "https://elpa.gnu.org/packages/")
-                           ("marmalade"
-                            .
-                            "https://marmalade-repo.org/packages/")
                           ))
 #+end_src
 ** Set-up ~use-package~
@@ -45,9 +43,9 @@
 ** Theme
 I still haven't been able to figure out when to use ~use-package~ or ~load-theme~ in this context
 #+begin_src emacs-lisp
-  ;; (use-package material-theme
-  ;;   :ensure t)
-  (load-theme 'material t)
+    (use-package material-theme
+      :ensure t
+      :config (load-theme 'material t))
 #+end_src
 ** Font
 Absolutely always [[https://sourcefoundry.org/hack/][Hack]]
@@ -94,6 +92,7 @@ Enable line numbers globally, format them, and add a solid vertical bar
 * Org Mode
 ** Setup
 #+begin_src emacs-lisp
+
 #+end_src
 * Python IDE packages
 ** [[https://github.com/jorgenschaefer/elpy][Elpy]]
