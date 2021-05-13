@@ -158,25 +158,25 @@ Emacs Python IDE, which I'm pretty sure I don't use it to its full extent.
     :init (elpy-enable))
 #+end_src
 ** [[https://github.com/paetzke/py-autopep8.el][py-autopep8]]
-Code formatting according to [[https://www.python.org/dev/peps/pep-0008/][PEP 8]] upon save.
+Format code upon save to comply with [[https://www.python.org/dev/peps/pep-0008/][PEP 8]].
 #+begin_src emacs-lisp
   (use-package py-autopep8
     :ensure t
-    :init (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save))
+    :config (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save))
 #+end_src
 ** [[https://github.com/pythonic-emacs/blacken][Blacken]]
-Code formatting according by [[https://github.com/psf/black][black]].
+Code formatting by [[https://github.com/psf/black][black]].
 #+begin_src emacs-lisp
   (use-package blacken
     :ensure t
-    :init 'blacken-mode)
+    :config 'blacken-mode)
 #+end_src
 ** [[https://www.flycheck.org/en/latest/][Flycheck]]
 Flycheck is not exclusive to Python, but it is set up only for it since I mainly develop in Python.
 #+begin_src emacs-lisp
   (use-package flycheck
     :ensure t
-    :init
+    :config
     (when (require 'flycheck nil t)
       (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
       (add-hook 'elpy-mode-hook 'flycheck-mode)))
@@ -228,7 +228,7 @@ I believe copy-pasting (in the Emacs sense of it) stopped to working with Emacs 
   (prefer-coding-system 'utf-8)
 #+end_src
 ** [[https://github.com/alphapapa/org-make-toc][org-make-toc]]
-"Usage" section in the README of the link above describes well how to use this package. Nevertheless, after running ~org-make-toc-insert~ I had to remove all TOC properties but ~:include all~ and ~:depth 2~ to customize the table of contents to my liking.
+"Usage" section in the README of the link in the header of this subsection describes well how to use this package. Nevertheless, after running ~org-make-toc-insert~ I had to remove all TOC properties but ~:include all~ and ~:depth 2~ to customize the table of contents to my liking.
 #+begin_src emacs-lisp
   (use-package org-make-toc :ensure t)
 #+end_src

@@ -78,15 +78,15 @@
 
 (use-package py-autopep8
   :ensure t
-  :init (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save))
+  :config (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save))
 
 (use-package blacken
   :ensure t
-  :init 'blacken-mode)
+  :config 'blacken-mode)
 
 (use-package flycheck
   :ensure t
-  :init
+  :config
   (when (require 'flycheck nil t)
     (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
     (add-hook 'elpy-mode-hook 'flycheck-mode)))
