@@ -33,7 +33,7 @@
   - [[#yaml-mode][yaml-mode]]
   - [[#clojure-mode][Clojure mode]]
   - [[#emacs-neotree][emacs-neotree]]
-  - [[#terminal-emulator][Terminal emulator]]
+  - [[#emacs-libvterm][emacs-libvterm]]
   - [[#magit][Magit]]
 - [[#miscellaneous][Miscellaneous]]
   - [[#normal-copy-pasting-in-windows][Normal copy-pasting in Windows]]
