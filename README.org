@@ -198,16 +198,12 @@ Flycheck is not exclusive to Python, but it is set up only for it since I mainly
     (global-set-key [f8] 'neotree-toggle)
     (setq-default neo-show-hidden-files t))
 #+end_src
-** Terminal emulator
-Binds a specific configuration of ~ansi-term~ to "C-c b". I don't much fancy how the windows are splitted. [[https://github.com/akermu/emacs-libvterm][emacs-libvterm]] might be a worthy replacement.
+** [[https://github.com/akermu/emacs-libvterm][emacs-libvterm]]
+Terminal emulation using ~emacs-libvterm~. TODO: replace fixed value of ~load-path~ with elisp code that will look for it.
 #+begin_src emacs-lisp
-  (defun ml/bash ()
-    "Start a terminal emulator in a new window"
-    (interactive)
-    (split-window-sensibly)
-    (other-window 1)
-    (ansi-term (executable-find "bash")))
-  (global-set-key (kbd "C-c b") #'ml/bash)
+  (use-package vterm
+    :ensure t
+    :load-path "./elpa/vterm-20210409.1558/vter-module.so")
 #+end_src
 ** [[https://magit.vc/][Magit]]
 #+begin_src emacs-lisp

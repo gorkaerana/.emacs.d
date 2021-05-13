@@ -101,13 +101,9 @@
   (global-set-key [f8] 'neotree-toggle)
   (setq-default neo-show-hidden-files t))
 
-(defun ml/bash ()
-  "Start a terminal emulator in a new window"
-  (interactive)
-  (split-window-sensibly)
-  (other-window 1)
-  (ansi-term (executable-find "bash")))
-(global-set-key (kbd "C-c b") #'ml/bash)
+(use-package vterm
+  :ensure t
+  :load-path "./elpa/vterm-20210409.1558/vter-module.so")
 
 (use-package magit :ensure t)
 
