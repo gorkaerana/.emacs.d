@@ -36,12 +36,19 @@
   :ensure t
   :init (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
 
+(use-package org-bullets 
+  :ensure t
+  :config 
+  (setq org-bullets-bullet-list '("⦿" "○" "•" "·" "⁃"))
+  (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+)
+
 (if (version< "27.0" emacs-version)
     (add-hook 'prog-mode-hook #'display-fill-column-indicator-mode))
 
-(setq menu-bar-mode -1)
+(setq menu-bar-mode nil)
 
-(setq tool-bar-mode -1)
+(setq tool-bar-mode nil)
 
 (setq inhibit-startup-message t)
 
@@ -101,9 +108,28 @@
   (global-set-key [f8] 'neotree-toggle)
   (setq-default neo-show-hidden-files t))
 
-(use-package vterm
-  :ensure t
-  :load-path "./elpa/vterm-20210409.1558/vter-module.so")
+(require 'cl-lib)
+
+  (defun filter-if-string-contained (list string)
+    ;; Filters for items in 'list' containing 'string'
+    ;; E.g., (filter-if-string-contained ("abc" "def") "a") -> ("abc")
+    (cl-remove-if-not
+     (lambda (s) (string-match string s))
+     list))
+
+  (use-package vterm
+    :ensure t
+    ;; :load-path (car
+    ;;             (filter-if-string-contained
+    ;;              ;; Within the subdirectory returned below, find the first file
+    ;;              ;; with extension ".so"
+    ;;              (directory-files
+    ;;               ;; First look for the subdirectories within "elpa" that contain
+    ;;               ;; the substring "vterm", and fetch the first result's full path
+    ;;               (car (filter-if-string-contained (directory-files "./elpa" t) "vterm"))
+    ;;               t)
+    ;;              ".so"))
+)
 
 (use-package magit :ensure t)
 

@@ -1,3 +1,4 @@
+
 #+TITLE: Literate emacs init
 #+AUTHOR: Gorka Eraña
 #+EMAIL: eranagorka@gmail.com
@@ -92,6 +93,16 @@ Absolutely always [[https://sourcefoundry.org/hack/][Hack]].
     :ensure t
     :init (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
 #+end_src
+** Pretty bullets
+[[https://github.com/sabof/org-bullets][org-bullets]] is a package that allows to substitute the asterisks in org-mode for UTF-8 characters. The availability of the bullets depends on how well UTF-8 is supported on the given machine that Emacs happens to be installed in, so ~org-bullets-bullet-list~ might vary from machine to machine. A searchable (and user-friendly) webpage that would make finding bullets more easy is available [[https://unicode-table.com/en/][here]].
+#+begin_src emacs-lisp
+  (use-package org-bullets 
+    :ensure t
+    :config 
+    (setq org-bullets-bullet-list '("⦿" "○" "•" "·" "⁃"))
+    (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+  )
+#+end_src
 ** Ruler at 80 characters
 ~display-fill-column-indicator-mode~ was introduced with Emacs 27, so the version ought to be checked before adding the hook.
 #+begin_src emacs-lisp
@@ -101,12 +112,12 @@ Absolutely always [[https://sourcefoundry.org/hack/][Hack]].
 ** Miscellaneous
 Disable menu bar.
 #+begin_src emacs-lisp
-  (setq menu-bar-mode -1)
+  (setq menu-bar-mode nil)
 #+end_src
 
 Disable tool bar.
 #+begin_src emacs-lisp
-  (setq tool-bar-mode -1)
+  (setq tool-bar-mode nil)
 #+end_src
 
 Hide startup message.
@@ -201,27 +212,28 @@ Flycheck is not exclusive to Python, but it is set up only for it since I mainly
 ** [[https://github.com/akermu/emacs-libvterm][emacs-libvterm]]
 Terminal emulation using ~emacs-libvterm~.
 #+begin_src emacs-lisp
-  (require 'cl-lib)
+    (require 'cl-lib)
 
-  (defun filter-if-string-contained (list string)
-    ;; Filters for items in 'list' containing 'string'
-    ;; E.g., (filter-if-string-contained ("abc" "def") "a") -> ("abc")
-    (cl-remove-if-not
-     (lambda (s) (string-match string s))
-     list))
+    (defun filter-if-string-contained (list string)
+      ;; Filters for items in 'list' containing 'string'
+      ;; E.g., (filter-if-string-contained ("abc" "def") "a") -> ("abc")
+      (cl-remove-if-not
+       (lambda (s) (string-match string s))
+       list))
 
-  (use-package vterm
-    :ensure t
-    :load-path (car
-                (filter-if-string-contained
-                 ;; Within the subdirectory returned below, find the first file
-                 ;; with extension ".so"
-                 (directory-files
-                  ;; First look for the subdirectories within "elpa" that contain
-                  ;; the substring "vterm", and fetch the first result's full path
-                  (car (filter-if-string-contained (directory-files "./elpa" t) "vterm"))
-                  t)
-                 ".so")))
+    (use-package vterm
+      :ensure t
+      ;; :load-path (car
+      ;;             (filter-if-string-contained
+      ;;              ;; Within the subdirectory returned below, find the first file
+      ;;              ;; with extension ".so"
+      ;;              (directory-files
+      ;;               ;; First look for the subdirectories within "elpa" that contain
+      ;;               ;; the substring "vterm", and fetch the first result's full path
+      ;;               (car (filter-if-string-contained (directory-files "./elpa" t) "vterm"))
+      ;;               t)
+      ;;              ".so"))
+  )
 #+end_src
 ** [[https://magit.vc/][Magit]]
 #+begin_src emacs-lisp
