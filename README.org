@@ -99,7 +99,7 @@ Absolutely always [[https://sourcefoundry.org/hack/][Hack]].
   (use-package org-bullets 
     :ensure t
     :config 
-    (setq org-bullets-bullet-list '("⦿" "○" "•" "·" "⁃"))
+    (setq org-bullets-bullet-list '("○" "•" "·"))
     (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
   )
 #+end_src
@@ -112,12 +112,12 @@ Absolutely always [[https://sourcefoundry.org/hack/][Hack]].
 ** Miscellaneous
 Disable menu bar.
 #+begin_src emacs-lisp
-  (setq menu-bar-mode nil)
+  (menu-bar-mode -1)
 #+end_src
 
 Disable tool bar.
 #+begin_src emacs-lisp
-  (setq tool-bar-mode nil)
+  (tool-bar-mode -1)
 #+end_src
 
 Hide startup message.
@@ -223,16 +223,16 @@ Terminal emulation using ~emacs-libvterm~.
 
     (use-package vterm
       :ensure t
-      ;; :load-path (car
-      ;;             (filter-if-string-contained
-      ;;              ;; Within the subdirectory returned below, find the first file
-      ;;              ;; with extension ".so"
-      ;;              (directory-files
-      ;;               ;; First look for the subdirectories within "elpa" that contain
-      ;;               ;; the substring "vterm", and fetch the first result's full path
-      ;;               (car (filter-if-string-contained (directory-files "./elpa" t) "vterm"))
-      ;;               t)
-      ;;              ".so"))
+      :load-path (car
+                   (filter-if-string-contained
+                    ;; Within the subdirectory returned below, find the first file
+                    ;; with extension ".so"
+                    (directory-files
+                     ;; First look for the subdirectories within "elpa" that contain
+                     ;; the substring "vterm", and fetch the first result's full path
+                     (car (filter-if-string-contained (directory-files "./elpa" t) "vterm"))
+                     t)
+                    ".so"))
   )
 #+end_src
 ** [[https://magit.vc/][Magit]]

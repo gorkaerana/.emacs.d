@@ -39,16 +39,16 @@
 (use-package org-bullets 
   :ensure t
   :config 
-  (setq org-bullets-bullet-list '("⦿" "○" "•" "·" "⁃"))
+  (setq org-bullets-bullet-list '("○" "•" "·"))
   (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
 )
 
 (if (version< "27.0" emacs-version)
     (add-hook 'prog-mode-hook #'display-fill-column-indicator-mode))
 
-(setq menu-bar-mode nil)
+(menu-bar-mode -1)
 
-(setq tool-bar-mode nil)
+(tool-bar-mode -1)
 
 (setq inhibit-startup-message t)
 
@@ -119,16 +119,16 @@
 
   (use-package vterm
     :ensure t
-    ;; :load-path (car
-    ;;             (filter-if-string-contained
-    ;;              ;; Within the subdirectory returned below, find the first file
-    ;;              ;; with extension ".so"
-    ;;              (directory-files
-    ;;               ;; First look for the subdirectories within "elpa" that contain
-    ;;               ;; the substring "vterm", and fetch the first result's full path
-    ;;               (car (filter-if-string-contained (directory-files "./elpa" t) "vterm"))
-    ;;               t)
-    ;;              ".so"))
+    :load-path (car
+                 (filter-if-string-contained
+                  ;; Within the subdirectory returned below, find the first file
+                  ;; with extension ".so"
+                  (directory-files
+                   ;; First look for the subdirectories within "elpa" that contain
+                   ;; the substring "vterm", and fetch the first result's full path
+                   (car (filter-if-string-contained (directory-files "./elpa" t) "vterm"))
+                   t)
+                  ".so"))
 )
 
 (use-package magit :ensure t)
