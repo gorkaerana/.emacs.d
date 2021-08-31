@@ -46,6 +46,41 @@
 (if (version< "27.0" emacs-version)
     (add-hook 'prog-mode-hook #'display-fill-column-indicator-mode))
 
+(setq-default mode-line-format
+  (list
+    ;; The buffer name, equals file name
+    '(:eval (propertize " %b" 'face 'font-lock-keyword-face 'help-echo (buffer-file-name)))
+
+    " — "
+
+    ;; Line and column
+    "("
+    (propertize "%02l" 'face 'font-lock-face-type)
+    ","
+    (propertize "%02c" 'face 'font-lock-face-type)
+    ") "
+
+    ;; Relative position, size of file
+    "("
+    (propertize "%p" 'face 'font-lock-constant-face)
+    ")"
+
+    ;; Fill with dashes
+    " — "
+
+    ;; Major mode of buffer
+    "["
+    '(:eval (propertize "%m" 'face 'font-lock-string-face 'help-echo buffer-file-coding-system))
+    "] "
+
+    ;; Minor modes
+    "["
+    minor-mode-alist
+    "]"
+
+  )
+)
+
 (menu-bar-mode -1)
 
 (tool-bar-mode -1)
