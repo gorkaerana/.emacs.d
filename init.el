@@ -61,9 +61,7 @@
     ") "
 
     ;; Relative position, size of file
-    "("
     (propertize "%p" 'face 'font-lock-constant-face)
-    ")"
 
     ;; Fill with dashes
     " — "

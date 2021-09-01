@@ -129,9 +129,7 @@ The following code chunk follows an incredibly helpful [[https://emacs-fu.blogsp
       ") "
 
       ;; Relative position, size of file
-      "("
       (propertize "%p" 'face 'font-lock-constant-face)
-      ")"
 
       ;; Fill with dashes
       " — "
