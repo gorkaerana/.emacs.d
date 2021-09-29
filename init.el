@@ -30,6 +30,10 @@
   :config (load-theme 'material t))
 
 (custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
  '(default ((t (:height 160 :family "Hack")))))
 
 (use-package rainbow-delimiters
@@ -131,6 +135,31 @@
     (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
     (add-hook 'elpy-mode-hook 'flycheck-mode)))
 
+(use-package lsp-mode
+  :init
+  ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
+  (setq lsp-keymap-prefix "C-c l")
+  :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
+         (python-mode . lsp)
+         (clojure-mode . lsp)
+         ;; if you want which-key integration
+         (lsp-mode . lsp-enable-which-key-integration))
+  :commands lsp)
+
+;; optionally
+;; (use-package lsp-ui :commands lsp-ui-mode)
+
+;; optionally if you want to use debugger
+;; (use-package dap-mode)
+;; (use-package dap-LANGUAGE) to load the dap adapter for your language
+
+;; optional if you want which-key integration
+;; (use-package which-key
+;;     :config
+;;     (which-key-mode))
+
+(use-package markdown-mode :ensure t)
+
 (use-package yaml-mode :ensure t)
 
 (use-package clojure-mode :ensure t)
@@ -177,3 +206,10 @@
 (prefer-coding-system 'utf-8)
 
 (use-package org-make-toc :ensure t)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   '(markdown-mode yaml-mode vterm use-package rainbow-delimiters py-autopep8 org-make-toc org-bullets neotree material-theme magit flycheck elpy clojure-mode blacken)))
