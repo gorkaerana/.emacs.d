@@ -30,10 +30,6 @@
   :config (load-theme 'material t))
 
 (custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
  '(default ((t (:height 160 :family "Hack")))))
 
 (use-package rainbow-delimiters
@@ -195,6 +191,14 @@
 
 (use-package magit :ensure t)
 
+(use-package paren
+  :config
+  (show-paren-mode 1)
+  (setq show-paren-style 'parenthesis)
+  (setq show-paren-when-point-in-periphery t)
+  (setq show-paren-when-point-inside-paren t)
+  )
+
 (if (eq system-type 'windows-nt)
     (progn
       (set-clipboard-coding-system 'utf-16-le)
@@ -206,10 +210,3 @@
 (prefer-coding-system 'utf-8)
 
 (use-package org-make-toc :ensure t)
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   '(markdown-mode yaml-mode vterm use-package rainbow-delimiters py-autopep8 org-make-toc org-bullets neotree material-theme magit flycheck elpy clojure-mode blacken)))

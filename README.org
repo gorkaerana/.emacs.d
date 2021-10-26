@@ -32,12 +32,16 @@
   - [[#py-autopep8][py-autopep8]]
   - [[#blacken][Blacken]]
   - [[#flycheck][Flycheck]]
+- [[#lsp][LSP]]
+  - [[#lsp-mode][LSP-mode]]
 - [[#various-ide-packages][Various IDE packages]]
+  - [[#markdown-mode][markdown-mode]]
   - [[#yaml-mode][yaml-mode]]
   - [[#clojure-mode][Clojure mode]]
   - [[#emacs-neotree][emacs-neotree]]
   - [[#emacs-libvterm][emacs-libvterm]]
   - [[#magit][Magit]]
+  - [[#paren-mode][Paren mode]]
 - [[#miscellaneous][Miscellaneous]]
   - [[#normal-copy-pasting-in-windows][Normal copy-pasting in Windows]]
   - [[#org-make-toc][org-make-toc]]
@@ -306,6 +310,17 @@ Terminal emulation using ~emacs-libvterm~.
 ** [[https://magit.vc/][Magit]]
 #+begin_src emacs-lisp
   (use-package magit :ensure t)
+#+end_src
+** [[https://www.emacswiki.org/emacs/ParenSetMode][Paren mode]]
+Highlight content inside parentheses, brackets and square brackets.
+#+begin_src emacs-lisp
+  (use-package paren
+    :config
+    (show-paren-mode 1)
+    (setq show-paren-style 'parenthesis)
+    (setq show-paren-when-point-in-periphery t)
+    (setq show-paren-when-point-inside-paren t)
+    )
 #+end_src
 * Miscellaneous
 ** Normal copy-pasting in Windows
