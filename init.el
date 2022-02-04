@@ -1,4 +1,3 @@
-;; 
 (require 'package)
 
 (package-initialize)
@@ -27,7 +26,8 @@
   :init (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
 
 (if (version< "27.0" emacs-version)
-    (add-hook 'prog-mode-hook #'display-fill-column-indicator-mode))
+    ((setq display-fill-column-indicator-column 79)
+     (add-hook 'prog-mode-hook #'display-fill-column-indicator-mode)))
 
 (setq-default mode-line-format
 	      (list

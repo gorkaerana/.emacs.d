@@ -53,7 +53,6 @@ Create ~init.el~ by tangling the contents of the code blocks: "C-c C-v t" (~org-
 ** Package infrastructure initialization
 Enables basic package supporting.
 #+begin_src emacs-lisp
-;; 
 (require 'package)
 #+end_src
 
