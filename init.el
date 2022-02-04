@@ -36,13 +36,6 @@
   :ensure t
   :init (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
 
-(use-package org-bullets 
-  :ensure t
-  :config 
-  (setq org-bullets-bullet-list '("○" "•" "·"))
-  (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
-)
-
 (if (version< "27.0" emacs-version)
     (add-hook 'prog-mode-hook #'display-fill-column-indicator-mode))
 
@@ -89,6 +82,10 @@
 
 (global-linum-mode t)
 (setq linum-format "%4d\u2502")
+(add-hook 'org-mode-hook #'(lambda ()
+                           (when (and (stringp buffer-file-name)
+                                      (string-match "\\.org\\'" buffer-file-name))
+                             (global-linum-mode 0))))
 
 (use-package org
   :ensure t
@@ -113,6 +110,13 @@
   (global-set-key (kbd "C-c a") 'org-agenda))
 
 (setq org-log-done 'time)
+
+(use-package org-bullets 
+  :ensure t
+  :config 
+  (setq org-bullets-bullet-list '("•"))
+  (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+)
 
 (use-package elpy
   :ensure t

@@ -21,13 +21,13 @@
   - [[#theme][Theme]]
   - [[#font][Font]]
   - [[#rainbow-delimiters][Rainbow delimiters]]
-  - [[#pretty-bullets][Pretty bullets]]
   - [[#ruler-at-80-characters][Ruler at 80 characters]]
   - [[#mode-line][Mode line]]
   - [[#miscellaneous][Miscellaneous]]
 - [[#org-mode][Org Mode]]
   - [[#setup][Setup]]
   - [[#create-a-closing-timestamp-when-marking-a-to-do-item-as-done][Create a "closing" timestamp when marking a to-do item as "done"]]
+  - [[#pretty-bullets][Pretty bullets]]
 - [[#python-ide-packages][Python IDE packages]]
   - [[#elpy][Elpy]]
   - [[#py-autopep8][py-autopep8]]
@@ -101,16 +101,6 @@ Absolutely always [[https://sourcefoundry.org/hack/][Hack]].
     :ensure t
     :init (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
 #+end_src
-** Pretty bullets
-[[https://github.com/sabof/org-bullets][org-bullets]] is a package that allows to substitute the asterisks in org-mode for UTF-8 characters. The availability of the bullets depends on how well UTF-8 is supported on the given machine that Emacs happens to be installed in, so ~org-bullets-bullet-list~ might vary from machine to machine. A searchable (and user-friendly) webpage that would make finding bullets more easy is available [[https://unicode-table.com/en/][here]].
-#+begin_src emacs-lisp
-  (use-package org-bullets 
-    :ensure t
-    :config 
-    (setq org-bullets-bullet-list '("○" "•" "·"))
-    (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
-  )
-#+end_src
 ** Ruler at 80 characters
 ~display-fill-column-indicator-mode~ was introduced with Emacs 27, so the version ought to be checked before adding the hook.
 #+begin_src emacs-lisp
@@ -174,10 +164,14 @@ Hide splash screen.
   (setq inhibit-splash-screen t)
 #+end_src
 
-Enable line numbers globally, format them, and add a solid vertical bar.
+Enable line numbers (for every file extension but ~.org~), format them, and add a solid vertical bar.
 #+begin_src emacs-lisp
   (global-linum-mode t)
   (setq linum-format "%4d\u2502")
+  (add-hook 'org-mode-hook #'(lambda ()
+                             (when (and (stringp buffer-file-name)
+                                        (string-match "\\.org\\'" buffer-file-name))
+                               (global-linum-mode 0))))
 #+end_src
 * Org Mode
 ** Setup
@@ -207,6 +201,16 @@ Enable line numbers globally, format them, and add a solid vertical bar.
 ** [[https://emacs.stackexchange.com/questions/47951/marking-a-todo-item-done-does-not-create-a-closing-timestamp-in-org-mode][Create a "closing" timestamp when marking a to-do item as "done"]]
 #+begin_src emacs-lisp
   (setq org-log-done 'time)
+#+end_src
+** Pretty bullets
+[[https://github.com/sabof/org-bullets][org-bullets]] is a package that allows to substitute the asterisks in org-mode for UTF-8 characters. The availability of the bullets depends on how well UTF-8 is supported on the given machine that Emacs happens to be installed in, so ~org-bullets-bullet-list~ might vary from machine to machine. A searchable (and user-friendly) webpage that would make finding bullets more easy is available [[https://unicode-table.com/en/][here]].
+#+begin_src emacs-lisp
+  (use-package org-bullets 
+    :ensure t
+    :config 
+    (setq org-bullets-bullet-list '("•"))
+    (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+  )
 #+end_src
 * Python IDE packages
 ** [[https://github.com/jorgenschaefer/elpy][Elpy]]
