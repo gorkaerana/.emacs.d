@@ -347,9 +347,9 @@ I believe copy-pasting (in the Emacs sense of it) stopped to working with Emacs 
 
 =To make a basic TOC, follow these steps:=
 
-=1. Choose a heading to contain a TOC and move the point to it.=
-=2. Run command org-make-toc-insert, which inserts a :CONTENTS: drawer and sets TOC properties. Set the include property to all.=
-=3. Run the command org-make-toc to update all TOCs in the document.=
+1. =Choose a heading to contain a TOC and move the point to it.=
+2. =Run command org-make-toc-insert, which inserts a :CONTENTS: drawer and sets TOC properties. Set the include property to all.=
+3. =Run the command org-make-toc to update all TOCs in the document.=
 
 =Use command org-make-toc-set to change TOC properties for the entry at point with completion.=
 
