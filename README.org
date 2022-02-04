@@ -344,11 +344,15 @@ I believe copy-pasting (in the Emacs sense of it) stopped to working with Emacs 
 #+end_src
 ** [[https://github.com/alphapapa/org-make-toc][org-make-toc]]
 "Usage" section in the README of the link in the header of this subsection describes well how to use this package. Quoting it:
+
 =To make a basic TOC, follow these steps:=
+
 =1. Choose a heading to contain a TOC and move the point to it.=
 =2. Run command org-make-toc-insert, which inserts a :CONTENTS: drawer and sets TOC properties. Set the include property to all.=
 =3. Run the command org-make-toc to update all TOCs in the document.=
+
 =Use command org-make-toc-set to change TOC properties for the entry at point with completion.=
+
 Nevertheless, after running ~org-make-toc-insert~ I had to remove all TOC properties but ~:include all~ and ~:depth 2~ to customize the table of contents to my liking.
 #+begin_src emacs-lisp
   (use-package org-make-toc :ensure t)
