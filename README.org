@@ -8,6 +8,8 @@
 #+PROPERTY: header-args :results silent :tangle "./init.el"
 #+OPTIONS: toc:2
 
+Create ~init.el~ by tangling the contents of the code blocks: "C-c C-v t" (~org-babel-tangle~).
+
 * Table of contents
 :PROPERTIES:
 :TOC: :include all :depth 2
@@ -47,31 +49,26 @@
   - [[#normal-copy-pasting-in-windows][Normal copy-pasting in Windows]]
   - [[#org-make-toc][org-make-toc]]
 :END:
-
 * Preface
-Create ~init.el~ by tangling the contents of the code blocks: "C-c C-v t" (~org-babel-tangle~).
 ** Package infrastructure initialization
+Enables basic package supporting.
 #+begin_src emacs-lisp
-  ;; Enables basic package supporting
-  (require 'package)
+;; 
+(require 'package)
+#+end_src
 
-  ;; Initialize the package infrastructure
-  (package-initialize)
+Initialize the package infrastructure.
+#+begin_src emacs-lisp
+(package-initialize)
+#+end_src
 
-  ;; Add several archives to list of available repositories
-  (setq package-archives '(("org"
-                            .
-                            "https://orgmode.org/elpa/")
-                           ("stable-melpa"
-                            .
-                            "https://stable.melpa.org/packages/")
-                           ("melpa"
-                            .
-                            "https://melpa.org/packages/")
-                           ("gnu"
-                            .
-                            "https://elpa.gnu.org/packages/")
-                          ))
+Add several archives to list of available repositories.
+#+begin_src emacs-lisp
+(setq package-archives
+      '(("org" . "https://orgmode.org/elpa/")
+      ("stable-melpa" . "https://stable.melpa.org/packages/")
+      ("melpa" . "https://melpa.org/packages/")
+      ("gnu" . "https://elpa.gnu.org/packages/")))
 #+end_src
 ** Set-up ~use-package~
 #+begin_src emacs-lisp
@@ -83,65 +80,78 @@ Create ~init.el~ by tangling the contents of the code blocks: "C-c C-v t" (~org-
 #+end_src
 * Aesthetics
 ** Theme
-I still haven't been able to figure out when to use ~use-package~ or ~load-theme~ in this context.
+I'm still to figure out when to use ~use-package~ or ~load-theme~ in this context.
 #+begin_src emacs-lisp
-    (use-package material-theme
-      :ensure t
-      :config (load-theme 'material t))
+(use-package material-theme
+  :ensure t
+  :config (load-theme 'material t))
 #+end_src
 ** Font
-Absolutely always [[https://sourcefoundry.org/hack/][Hack]].
+Absolutely always [[https://sourcefoundry.org/hack/][Hack]]. It needs to be installed in the machine.
 #+begin_src emacs-lisp
-  (custom-set-faces
-   '(default ((t (:height 160 :family "Hack")))))
+(custom-set-faces
+ '(default ((t (:height 160 :family "Hack")))))
 #+end_src
 ** Rainbow delimiters
 #+begin_src emacs-lisp
-  (use-package rainbow-delimiters
-    :ensure t
-    :init (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
+(use-package rainbow-delimiters
+  :ensure t
+  :init (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
 #+end_src
 ** Ruler at 80 characters
 ~display-fill-column-indicator-mode~ was introduced with Emacs 27, so the version ought to be checked before adding the hook.
 #+begin_src emacs-lisp
-  (if (version< "27.0" emacs-version)
-      (add-hook 'prog-mode-hook #'display-fill-column-indicator-mode))
+(if (version< "27.0" emacs-version)
+    ((setq display-fill-column-indicator-column 79)
+     (add-hook 'prog-mode-hook #'display-fill-column-indicator-mode)))
 #+end_src
 ** [[http://www.gnu.org/software/emacs/manual/html_node/emacs/Mode-Line.html][Mode line]]
 The following code chunk follows an incredibly helpful [[https://emacs-fu.blogspot.com/2011/08/customizing-mode-line.html][blog post]] from Emacs-fu.
 #+begin_src emacs-lisp
-  (setq-default mode-line-format
-    (list
-      ;; The buffer name, equals file name
-      '(:eval (propertize " %b" 'face 'font-lock-keyword-face 'help-echo (buffer-file-name)))
+(setq-default mode-line-format
+	      (list
+	       ;; The buffer name, equals file name
+	       '(:eval
+		 (propertize
+		  " %b"
+		  'face
+		  'font-lock-keyword-face
+		  'help-echo
+		  (buffer-file-name)))
 
-      " — "
-      
-      ;; Line and column
-      "("
-      (propertize "%02l" 'face 'font-lock-face-type)
-      ","
-      (propertize "%02c" 'face 'font-lock-face-type)
-      ") "
+	       " — "
 
-      ;; Relative position, size of file
-      (propertize "%p" 'face 'font-lock-constant-face)
+	       ;; Line and column
+	       "("
+	       (propertize "%02l" 'face 'font-lock-face-type)
+	       ","
+	       (propertize "%02c" 'face 'font-lock-face-type)
+	       ") "
 
-      ;; Fill with dashes
-      " — "
+	       ;; Relative position, size of file
+	       (propertize "%p" 'face 'font-lock-constant-face)
 
-      ;; Major mode of buffer
-      "["
-      '(:eval (propertize "%m" 'face 'font-lock-string-face 'help-echo buffer-file-coding-system))
-      "] "
+	       ;; Fill with dashes
+	       " — "
 
-      ;; Minor modes
-      "["
-      minor-mode-alist
-      "]"
 
-    )
-  )
+	       ;; Major mode of buffer
+	       "["
+	       '(:eval
+		 (propertize
+		  "%m"
+		  'face
+		  'font-lock-string-face
+		  'help-echo
+		  buffer-file-coding-system))
+	       "] "
+
+	       ;; Minor modes
+	       "["
+	       minor-mode-alist
+	       "]"
+
+	       ))
 #+end_src
 ** Miscellaneous
 Disable menu bar.
@@ -166,185 +176,187 @@ Hide splash screen.
 
 Enable line numbers (for every file extension but ~.org~), format them, and add a solid vertical bar.
 #+begin_src emacs-lisp
-  (global-linum-mode t)
+  ;; (global-linum-mode t)
   (setq linum-format "%4d\u2502")
-  (add-hook 'org-mode-hook #'(lambda ()
-                             (when (and (stringp buffer-file-name)
-                                        (string-match "\\.org\\'" buffer-file-name))
-                               (global-linum-mode 0))))
+  (define-globalized-minor-mode my-global-linum-mode linum-mode
+    (lambda ()
+      (unless (or (minibufferp)
+                  (derived-mode-p 'org-mode))
+        (linum-mode 1))))
+  (my-global-linum-mode t)
 #+end_src
 * Org Mode
 ** Setup
 #+begin_src emacs-lisp
-  (use-package org
-    :ensure t
-    :mode ("\\.org$" . org-mode)
-    :config
-    (setq org-startup-truncated t)
-    ;; Custom todo keyword sequence and colours
-    (setq org-todo-keywords '((sequence
-                              "TODO"
-                              "IN-PROGRESS"
-                              "WAITING"
-                              "CANCELLED"
-                              "DONE"))
-          org-todo-keyword-faces '(("TODO" . "white")
-                                   ("IN-PROGRESS" . "orange")
-                                   ("WAITING" . "red")
-                                   ("CANCELLED" . "black")
-                                   ("DONE" . "green")))
-    ;; Linking shortcuts
-    (global-set-key (kbd "C-c l") 'org-store-link)
-    (global-set-key (kbd "C-c C-l") 'org-insert-link)
-    (global-set-key (kbd "C-c a") 'org-agenda))
+(use-package org
+  :ensure t
+  :mode ("\\.org$" . org-mode)
+  :config
+  (setq org-startup-truncated t)
+  ;; Custom todo keyword sequence and colours
+  (setq org-todo-keywords
+	'((sequence
+           "TODO"
+           "IN-PROGRESS"
+           "WAITING"
+           "CANCELLED"
+           "DONE"))
+        org-todo-keyword-faces
+	'(("TODO" . "white")
+          ("IN-PROGRESS" . "orange")
+          ("WAITING" . "red")
+          ("CANCELLED" . "black")
+          ("DONE" . "green")))
+  ;; Linking shortcuts
+  (global-set-key (kbd "C-c l") 'org-store-link)
+  (global-set-key (kbd "C-c C-l") 'org-insert-link)
+  (global-set-key (kbd "C-c a") 'org-agenda))
 #+end_src
 ** [[https://emacs.stackexchange.com/questions/47951/marking-a-todo-item-done-does-not-create-a-closing-timestamp-in-org-mode][Create a "closing" timestamp when marking a to-do item as "done"]]
 #+begin_src emacs-lisp
-  (setq org-log-done 'time)
+(setq org-log-done 'time)
 #+end_src
 ** Pretty bullets
 [[https://github.com/sabof/org-bullets][org-bullets]] is a package that allows to substitute the asterisks in org-mode for UTF-8 characters. The availability of the bullets depends on how well UTF-8 is supported on the given machine that Emacs happens to be installed in, so ~org-bullets-bullet-list~ might vary from machine to machine. A searchable (and user-friendly) webpage that would make finding bullets more easy is available [[https://unicode-table.com/en/][here]].
 #+begin_src emacs-lisp
-  (use-package org-bullets 
-    :ensure t
-    :config 
-    (setq org-bullets-bullet-list '("•"))
-    (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
-  )
+(use-package org-bullets 
+  :ensure t
+  :config 
+  (setq org-bullets-bullet-list '("•"))
+  (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
 #+end_src
 * Python IDE packages
 ** [[https://github.com/jorgenschaefer/elpy][Elpy]]
 Emacs Python IDE, which I'm pretty sure I don't use it to its full extent.
 #+begin_src emacs-lisp
-  (use-package elpy
-    :ensure t
-    :init (elpy-enable))
+(use-package elpy
+  :ensure t
+  :init (elpy-enable))
 #+end_src
 ** [[https://github.com/paetzke/py-autopep8.el][py-autopep8]]
 Format code upon save to comply with [[https://www.python.org/dev/peps/pep-0008/][PEP 8]].
 #+begin_src emacs-lisp
-  (use-package py-autopep8
-    :ensure t
-    :config (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save))
+(use-package py-autopep8
+  :ensure t
+  :config (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save))
 #+end_src
 ** [[https://github.com/pythonic-emacs/blacken][Blacken]]
 Code formatting by [[https://github.com/psf/black][black]].
 #+begin_src emacs-lisp
-  (use-package blacken
-    :ensure t
-    :config 'blacken-mode)
+(use-package blacken
+  :ensure t
+  :config 'blacken-mode)
 #+end_src
 ** [[https://www.flycheck.org/en/latest/][Flycheck]]
 Flycheck is not exclusive to Python, but it is set up only for it since I mainly develop in Python.
 #+begin_src emacs-lisp
-  (use-package flycheck
-    :ensure t
-    :config
-    (when (require 'flycheck nil t)
-      (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
-      (add-hook 'elpy-mode-hook 'flycheck-mode)))
+(use-package flycheck
+  :ensure t
+  :config
+  (when (require 'flycheck nil t)
+    (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
+    (add-hook 'elpy-mode-hook 'flycheck-mode)))
 #+end_src
 * LSP
 ** [[https://emacs-lsp.github.io/lsp-mode/][LSP-mode]]
 #+begin_src emacs-lisp
-  (use-package lsp-mode
-    :init
-    ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
-    (setq lsp-keymap-prefix "C-c l")
-    :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
-           (python-mode . lsp)
-           (clojure-mode . lsp)
-           ;; if you want which-key integration
-           (lsp-mode . lsp-enable-which-key-integration))
-    :commands lsp)
+(use-package lsp-mode
+  :init
+  ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
+  (setq lsp-keymap-prefix "C-c l")
+  :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
+         (python-mode . lsp)
+         (clojure-mode . lsp)
+         ;; if you want which-key integration
+         (lsp-mode . lsp-enable-which-key-integration))
+  :commands lsp)
 
-  ;; optionally
-  ;; (use-package lsp-ui :commands lsp-ui-mode)
+;; optionally
+;; (use-package lsp-ui :commands lsp-ui-mode)
 
-  ;; optionally if you want to use debugger
-  ;; (use-package dap-mode)
-  ;; (use-package dap-LANGUAGE) to load the dap adapter for your language
+;; optionally if you want to use debugger
+;; (use-package dap-mode)
+;; (use-package dap-LANGUAGE) to load the dap adapter for your language
 
-  ;; optional if you want which-key integration
-  ;; (use-package which-key
-  ;;     :config
-  ;;     (which-key-mode))
+;; optional if you want which-key integration
+;; (use-package which-key
+;;     :config
+;;     (which-key-mode))
 #+end_src
 * Various IDE packages
 ** [[https://www.emacswiki.org/emacs/MarkdownMode][markdown-mode]]
 #+begin_src emacs-lisp
-  (use-package markdown-mode :ensure t)
+(use-package markdown-mode :ensure t)
 #+end_src
 ** [[https://github.com/yoshiki/yaml-mode][yaml-mode]]
 #+begin_src emacs-lisp
-  (use-package yaml-mode :ensure t)
+(use-package yaml-mode :ensure t)
 #+end_src
 ** [[https://github.com/clojure-emacs/clojure-mode/][Clojure mode]]
 #+begin_src emacs-lisp
-  (use-package clojure-mode :ensure t)
+(use-package clojure-mode :ensure t)
 #+end_src
 ** [[https://github.com/jaypei/emacs-neotree][emacs-neotree]]
 #+begin_src emacs-lisp
-  (use-package neotree
-    :ensure t
-    :init
-    (global-set-key [f8] 'neotree-toggle)
-    (setq-default neo-show-hidden-files t))
+(use-package neotree
+  :ensure t
+  :init
+  (global-set-key [f8] 'neotree-toggle)
+  (setq-default neo-show-hidden-files t))
 #+end_src
 ** [[https://github.com/akermu/emacs-libvterm][emacs-libvterm]]
 Terminal emulation using ~emacs-libvterm~.
 #+begin_src emacs-lisp
-    (require 'cl-lib)
+(require 'cl-lib)
 
-    (defun filter-if-string-contained (list string)
-      ;; Filters for items in 'list' containing 'string'
-      ;; E.g., (filter-if-string-contained ("abc" "def") "a") -> ("abc")
-      (cl-remove-if-not
-       (lambda (s) (string-match string s))
-       list))
+(defun filter-if-string-contained (list string)
+  ;; Filters for items in 'list' containing 'string'
+  ;; E.g., (filter-if-string-contained ("abc" "def") "a") -> ("abc")
+  (cl-remove-if-not
+   (lambda (s) (string-match string s))
+   list))
 
-    (use-package vterm
-      :ensure t
-      :load-path (car
-                   (filter-if-string-contained
-                    ;; Within the subdirectory returned below, find the first file
-                    ;; with extension ".so"
-                    (directory-files
-                     ;; First look for the subdirectories within "elpa" that contain
-                     ;; the substring "vterm", and fetch the first result's full path
-                     (car (filter-if-string-contained (directory-files "./elpa" t) "vterm"))
-                     t)
-                    ".so"))
+(use-package vterm
+  :ensure t
+  :load-path (car
+              (filter-if-string-contained
+               ;; Within the subdirectory returned below, find the first file
+               ;; with extension ".so"
+               (directory-files
+                ;; First look for the subdirectories within "elpa" that contain
+                ;; the substring "vterm", and fetch the first result's full path
+                (car (filter-if-string-contained (directory-files "./elpa" t) "vterm"))
+                t)
+               ".so"))
   )
 #+end_src
 ** [[https://magit.vc/][Magit]]
 #+begin_src emacs-lisp
-  (use-package magit :ensure t)
+(use-package magit :ensure t)
 #+end_src
 ** [[https://www.emacswiki.org/emacs/ParenSetMode][Paren mode]]
 Highlight content inside parentheses, brackets and square brackets.
 #+begin_src emacs-lisp
-  (use-package paren
-    :config
-    (show-paren-mode 1)
-    (setq show-paren-style 'parenthesis)
-    (setq show-paren-when-point-in-periphery t)
-    (setq show-paren-when-point-inside-paren t)
-    )
+(use-package paren
+  :config
+  (show-paren-mode 1)
+  (setq show-paren-style 'parenthesis)
+  (setq show-paren-when-point-in-periphery t)
+  (setq show-paren-when-point-inside-paren t))
 #+end_src
 * Miscellaneous
 ** Normal copy-pasting in Windows
 I believe copy-pasting (in the Emacs sense of it) stopped to working with Emacs 27. The following code block fixes it.
 #+begin_src emacs-lisp
-  (if (eq system-type 'windows-nt)
-      (progn
-        (set-clipboard-coding-system 'utf-16-le)
-        (set-selection-coding-system 'utf-16-le))
-    (set-selection-coding-system 'utf-8))
-  (setq locale-coding-system 'utf-8)
-  (set-terminal-coding-system 'utf-8)
-  (set-keyboard-coding-system 'utf-8)
-  (prefer-coding-system 'utf-8)
+(if (eq system-type 'windows-nt)
+    (progn
+      (set-clipboard-coding-system 'utf-16-le)
+      (set-selection-coding-system 'utf-16-le))
+  (set-selection-coding-system 'utf-8))
+(setq locale-coding-system 'utf-8)
+(set-terminal-coding-system 'utf-8)
+(set-keyboard-coding-system 'utf-8)
+(prefer-coding-system 'utf-8)
 #+end_src
 ** [[https://github.com/alphapapa/org-make-toc][org-make-toc]]
 "Usage" section in the README of the link in the header of this subsection describes well how to use this package. Quoting it:
@@ -359,5 +371,5 @@ I believe copy-pasting (in the Emacs sense of it) stopped to working with Emacs 
 
 Nevertheless, after running ~org-make-toc-insert~ I had to remove all TOC properties but ~:include all~ and ~:depth 2~ to customize the table of contents to my liking.
 #+begin_src emacs-lisp
-  (use-package org-make-toc :ensure t)
+(use-package org-make-toc :ensure t)
 #+end_src
