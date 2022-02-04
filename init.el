@@ -112,6 +112,8 @@
   (global-set-key (kbd "C-c C-l") 'org-insert-link)
   (global-set-key (kbd "C-c a") 'org-agenda))
 
+(setq org-log-done 'time)
+
 (use-package elpy
   :ensure t
   :init (elpy-enable))

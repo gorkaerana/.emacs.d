@@ -10,7 +10,7 @@
 
 * Table of contents
 :PROPERTIES:
-:TOC:      :include all :depth 2
+:TOC: :include all :depth 2
 :END:
 :CONTENTS:
 - [[#table-of-contents][Table of contents]]
@@ -27,6 +27,7 @@
   - [[#miscellaneous][Miscellaneous]]
 - [[#org-mode][Org Mode]]
   - [[#setup][Setup]]
+  - [[#create-a-closing-timestamp-when-marking-a-to-do-item-as-done][Create a "closing" timestamp when marking a to-do item as "done"]]
 - [[#python-ide-packages][Python IDE packages]]
   - [[#elpy][Elpy]]
   - [[#py-autopep8][py-autopep8]]
@@ -46,6 +47,7 @@
   - [[#normal-copy-pasting-in-windows][Normal copy-pasting in Windows]]
   - [[#org-make-toc][org-make-toc]]
 :END:
+
 * Preface
 Create ~init.el~ by tangling the contents of the code blocks: "C-c C-v t" (~org-babel-tangle~).
 ** Package infrastructure initialization
@@ -202,6 +204,10 @@ Enable line numbers globally, format them, and add a solid vertical bar.
     (global-set-key (kbd "C-c C-l") 'org-insert-link)
     (global-set-key (kbd "C-c a") 'org-agenda))
 #+end_src
+** [[https://emacs.stackexchange.com/questions/47951/marking-a-todo-item-done-does-not-create-a-closing-timestamp-in-org-mode][Create a "closing" timestamp when marking a to-do item as "done"]]
+#+begin_src emacs-lisp
+  (setq org-log-done 'time)
+#+end_src
 * Python IDE packages
 ** [[https://github.com/jorgenschaefer/elpy][Elpy]]
 Emacs Python IDE, which I'm pretty sure I don't use it to its full extent.
@@ -337,7 +343,13 @@ I believe copy-pasting (in the Emacs sense of it) stopped to working with Emacs 
   (prefer-coding-system 'utf-8)
 #+end_src
 ** [[https://github.com/alphapapa/org-make-toc][org-make-toc]]
-"Usage" section in the README of the link in the header of this subsection describes well how to use this package. Nevertheless, after running ~org-make-toc-insert~ I had to remove all TOC properties but ~:include all~ and ~:depth 2~ to customize the table of contents to my liking.
+"Usage" section in the README of the link in the header of this subsection describes well how to use this package. Quoting it:
+=To make a basic TOC, follow these steps:=
+=1. Choose a heading to contain a TOC and move the point to it.=
+=2. Run command org-make-toc-insert, which inserts a :CONTENTS: drawer and sets TOC properties. Set the include property to all.=
+=3. Run the command org-make-toc to update all TOCs in the document.=
+=Use command org-make-toc-set to change TOC properties for the entry at point with completion.=
+Nevertheless, after running ~org-make-toc-insert~ I had to remove all TOC properties but ~:include all~ and ~:depth 2~ to customize the table of contents to my liking.
 #+begin_src emacs-lisp
   (use-package org-make-toc :ensure t)
 #+end_src
