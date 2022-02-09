@@ -3,10 +3,10 @@
 (package-initialize)
 
 (setq package-archives
-      '(("org" . "https://orgmode.org/elpa/")
+      '(("gnu" . "https://elpa.gnu.org/packages/")
+      ("org" . "https://orgmode.org/elpa/")
       ("stable-melpa" . "https://stable.melpa.org/packages/")
-      ("melpa" . "https://melpa.org/packages/")
-      ("gnu" . "https://elpa.gnu.org/packages/")))
+      ("melpa" . "https://melpa.org/packages/")))
 
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
@@ -26,8 +26,7 @@
   :init (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
 
 (if (version< "27.0" emacs-version)
-    ((setq display-fill-column-indicator-column 79)
-     (add-hook 'prog-mode-hook #'display-fill-column-indicator-mode)))
+     (add-hook 'prog-mode-hook #'display-fill-column-indicator-mode))
 
 (setq-default mode-line-format
 	      (list
@@ -94,6 +93,9 @@
 (use-package org
   :ensure t
   :mode ("\\.org$" . org-mode)
+  :bind (("C-c l" . org-store-link)
+	 ("C-c C-l" . org-insert-link)
+	 ("C-c a" . org-agenda))
   :config
   (setq org-startup-truncated t)
   ;; Custom todo keyword sequence and colours
@@ -110,18 +112,27 @@
           ("WAITING" . "red")
           ("CANCELLED" . "black")
           ("DONE" . "green")))
-  ;; Linking shortcuts
-  (global-set-key (kbd "C-c l") 'org-store-link)
-  (global-set-key (kbd "C-c C-l") 'org-insert-link)
-  (global-set-key (kbd "C-c a") 'org-agenda))
-
-(setq org-log-done 'time)
+  ;; Create "CLOSING" timestamp when marking to-do item as "DONE"
+  (setq org-log-done 'time)
+  ;; Org agenda files
+  (setq org-agenda-files (list "c:/Users/GorkaEraña/Dropbox/emacs/work/client_projects/novo_nordisk/we-publish.org"))
+  )
 
 (use-package org-bullets 
   :ensure t
   :config 
   (setq org-bullets-bullet-list '("•"))
   (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+
+(use-package emacsql-sqlite :ensure t)
+
+(use-package org-roam
+  :ensure t
+  :custom (org-roam-directory "c:/Users/GorkaEraña/Dropbox/roam_notes")
+  :bind (("C-c n l" . org-roam-buffer-toggle)
+         ("C-c n f" . org-roam-node-find)
+         ("C-c n i" . org-roam-node-insert))
+  :config (org-roam-setup))
 
 (use-package elpy
   :ensure t

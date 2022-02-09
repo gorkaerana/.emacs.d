@@ -28,8 +28,8 @@ Create ~init.el~ by tangling the contents of the code blocks: "C-c C-v t" (~org-
   - [[#miscellaneous][Miscellaneous]]
 - [[#org-mode][Org Mode]]
   - [[#setup][Setup]]
-  - [[#create-a-closing-timestamp-when-marking-a-to-do-item-as-done][Create a "closing" timestamp when marking a to-do item as "done"]]
   - [[#pretty-bullets][Pretty bullets]]
+  - [[#org-roam][Org roam]]
 - [[#python-ide-packages][Python IDE packages]]
   - [[#elpy][Elpy]]
   - [[#py-autopep8][py-autopep8]]
@@ -64,10 +64,10 @@ Initialize the package infrastructure.
 Add several archives to list of available repositories.
 #+begin_src emacs-lisp
 (setq package-archives
-      '(("org" . "https://orgmode.org/elpa/")
+      '(("gnu" . "https://elpa.gnu.org/packages/")
+      ("org" . "https://orgmode.org/elpa/")
       ("stable-melpa" . "https://stable.melpa.org/packages/")
-      ("melpa" . "https://melpa.org/packages/")
-      ("gnu" . "https://elpa.gnu.org/packages/")))
+      ("melpa" . "https://melpa.org/packages/")))
 #+end_src
 ** Set-up ~use-package~
 #+begin_src emacs-lisp
@@ -101,8 +101,7 @@ Absolutely always [[https://sourcefoundry.org/hack/][Hack]]. It needs to be inst
 ~display-fill-column-indicator-mode~ was introduced with Emacs 27, so the version ought to be checked before adding the hook.
 #+begin_src emacs-lisp
 (if (version< "27.0" emacs-version)
-    ((setq display-fill-column-indicator-column 79)
-     (add-hook 'prog-mode-hook #'display-fill-column-indicator-mode)))
+     (add-hook 'prog-mode-hook #'display-fill-column-indicator-mode))
 #+end_src
 ** [[http://www.gnu.org/software/emacs/manual/html_node/emacs/Mode-Line.html][Mode line]]
 The following code chunk follows an incredibly helpful [[https://emacs-fu.blogspot.com/2011/08/customizing-mode-line.html][blog post]] from Emacs-fu.
@@ -185,11 +184,17 @@ Enable line numbers (for every file extension but ~.org~), format them, and add 
   (my-global-linum-mode t)
 #+end_src
 * Org Mode
+Related reads:
+- [[https://orgmode.org/worg/org-tutorials/orgtutorial_dto.html]["David O'Toole Org tutorial" by David O'Toole]]
+- [[https://blog.aaronbieber.com/2016/09/24/an-agenda-for-life-with-org-mode.html]["An Agenda for Life With Org Mode" by Aaron Bieber]]
 ** Setup
 #+begin_src emacs-lisp
 (use-package org
   :ensure t
   :mode ("\\.org$" . org-mode)
+  :bind (("C-c l" . org-store-link)
+	 ("C-c C-l" . org-insert-link)
+	 ("C-c a" . org-agenda))
   :config
   (setq org-startup-truncated t)
   ;; Custom todo keyword sequence and colours
@@ -206,14 +211,11 @@ Enable line numbers (for every file extension but ~.org~), format them, and add 
           ("WAITING" . "red")
           ("CANCELLED" . "black")
           ("DONE" . "green")))
-  ;; Linking shortcuts
-  (global-set-key (kbd "C-c l") 'org-store-link)
-  (global-set-key (kbd "C-c C-l") 'org-insert-link)
-  (global-set-key (kbd "C-c a") 'org-agenda))
-#+end_src
-** [[https://emacs.stackexchange.com/questions/47951/marking-a-todo-item-done-does-not-create-a-closing-timestamp-in-org-mode][Create a "closing" timestamp when marking a to-do item as "done"]]
-#+begin_src emacs-lisp
-(setq org-log-done 'time)
+  ;; Create "CLOSING" timestamp when marking to-do item as "DONE"
+  (setq org-log-done 'time)
+  ;; Org agenda files
+  (setq org-agenda-files (list "c:/Users/GorkaEraña/Dropbox/emacs/work/client_projects/novo_nordisk/we-publish.org"))
+  )
 #+end_src
 ** Pretty bullets
 [[https://github.com/sabof/org-bullets][org-bullets]] is a package that allows to substitute the asterisks in org-mode for UTF-8 characters. The availability of the bullets depends on how well UTF-8 is supported on the given machine that Emacs happens to be installed in, so ~org-bullets-bullet-list~ might vary from machine to machine. A searchable (and user-friendly) webpage that would make finding bullets more easy is available [[https://unicode-table.com/en/][here]].
@@ -224,7 +226,28 @@ Enable line numbers (for every file extension but ~.org~), format them, and add 
   (setq org-bullets-bullet-list '("•"))
   (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
 #+end_src
+** Org roam
+Related reads:
+- [[https://systemcrafters.cc/build-a-second-brain-in-emacs/getting-started-with-org-roam/]["Build a Second Brain in Emacs Org Roam" by System Crafters]]
+- [[https://www.orgroam.com/manual.html]["Org-roam User Manual" by Jethro Kuan]]
+
+Following [[https://github.com/org-roam/org-roam/blob/e1873a6a1660b5c4f850df2da578d1a1b851f8ac/doc/installation.md#scoop][this]] installation guide:
+#+begin_src emacs-lisp
+  (use-package emacsql-sqlite :ensure t)
+#+end_src
+
+#+begin_src emacs-lisp
+  (use-package org-roam
+    :ensure t
+    :custom (org-roam-directory "c:/Users/GorkaEraña/Dropbox/roam_notes")
+    :bind (("C-c n l" . org-roam-buffer-toggle)
+           ("C-c n f" . org-roam-node-find)
+           ("C-c n i" . org-roam-node-insert))
+    :config (org-roam-setup))
+#+end_src
 * Python IDE packages
+Related reads:
+- [[https://realpython.com/emacs-the-best-python-editor/]["Emacs: The Best Python Editor? by John Fincher]]
 ** [[https://github.com/jorgenschaefer/elpy][Elpy]]
 Emacs Python IDE, which I'm pretty sure I don't use it to its full extent.
 #+begin_src emacs-lisp
