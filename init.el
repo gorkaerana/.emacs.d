@@ -1,12 +1,14 @@
+;; Enables basic package supporting
 (require 'package)
 
-(package-initialize)
+;; Add several archives to list of available repositories
+(add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/"))
+(add-to-list 'package-archives '("stable-melpa" . "https://stable.melpa.org/packages/"))
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
+(add-to-list 'package-archives '("gnu" . "https://elpa.gnu.org/packages/"))
 
-(setq package-archives
-      '(("gnu" . "https://elpa.gnu.org/packages/")
-      ("org" . "https://orgmode.org/elpa/")
-      ("stable-melpa" . "https://stable.melpa.org/packages/")
-      ("melpa" . "https://melpa.org/packages/")))
+;; Initialize the package infrastructure
+(package-initialize)
 
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
@@ -19,59 +21,57 @@
   :config (load-theme 'material t))
 
 (custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
  '(default ((t (:height 160 :family "Hack")))))
 
 (use-package rainbow-delimiters
   :ensure t
   :init (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
 
+(use-package org-bullets 
+  :ensure t
+  :config 
+  (setq org-bullets-bullet-list '("○" "•" "·"))
+  (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+)
+
 (if (version< "27.0" emacs-version)
-     (add-hook 'prog-mode-hook #'display-fill-column-indicator-mode))
+    (add-hook 'prog-mode-hook #'display-fill-column-indicator-mode))
 
 (setq-default mode-line-format
-	      (list
-	       ;; The buffer name, equals file name
-	       '(:eval
-		 (propertize
-		  " %b"
-		  'face
-		  'font-lock-keyword-face
-		  'help-echo
-		  (buffer-file-name)))
+  (list
+    ;; The buffer name, equals file name
+    '(:eval (propertize " %b" 'face 'font-lock-keyword-face 'help-echo (buffer-file-name)))
 
-	       " — "
+    " — "
+      
+    ;; Line and column
+    "("
+    (propertize "%02l" 'face 'font-lock-face-type)
+    ","
+    (propertize "%02c" 'face 'font-lock-face-type)
+    ") "
 
-	       ;; Line and column
-	       "("
-	       (propertize "%02l" 'face 'font-lock-face-type)
-	       ","
-	       (propertize "%02c" 'face 'font-lock-face-type)
-	       ") "
+    ;; Relative position, size of file
+    (propertize "%p" 'face 'font-lock-constant-face)
 
-	       ;; Relative position, size of file
-	       (propertize "%p" 'face 'font-lock-constant-face)
+    ;; Fill with dashes
+    " — "
 
-	       ;; Fill with dashes
-	       " — "
+    ;; Major mode of buffer
+    "["
+    '(:eval (propertize "%m" 'face 'font-lock-string-face 'help-echo buffer-file-coding-system))
+    "] "
 
+    ;; Minor modes
+    "["
+    minor-mode-alist
+    "]"
 
-	       ;; Major mode of buffer
-	       "["
-	       '(:eval
-		 (propertize
-		  "%m"
-		  'face
-		  'font-lock-string-face
-		  'help-echo
-		  buffer-file-coding-system))
-	       "] "
-
-	       ;; Minor modes
-	       "["
-	       minor-mode-alist
-	       "]"
-
-	       ))
+  ))
 
 (menu-bar-mode -1)
 
@@ -81,58 +81,30 @@
 
 (setq inhibit-splash-screen t)
 
-;; (global-linum-mode t)
+(global-linum-mode t)
 (setq linum-format "%4d\u2502")
-(define-globalized-minor-mode my-global-linum-mode linum-mode
-  (lambda ()
-    (unless (or (minibufferp)
-                (derived-mode-p 'org-mode))
-      (linum-mode 1))))
-(my-global-linum-mode t)
 
 (use-package org
   :ensure t
   :mode ("\\.org$" . org-mode)
-  :bind (("C-c l" . org-store-link)
-	 ("C-c C-l" . org-insert-link)
-	 ("C-c a" . org-agenda))
   :config
   (setq org-startup-truncated t)
   ;; Custom todo keyword sequence and colours
-  (setq org-todo-keywords
-	'((sequence
-           "TODO"
-           "IN-PROGRESS"
-           "WAITING"
-           "CANCELLED"
-           "DONE"))
-        org-todo-keyword-faces
-	'(("TODO" . "white")
-          ("IN-PROGRESS" . "orange")
-          ("WAITING" . "red")
-          ("CANCELLED" . "black")
-          ("DONE" . "green")))
-  ;; Create "CLOSING" timestamp when marking to-do item as "DONE"
-  (setq org-log-done 'time)
-  ;; Org agenda files
-  (setq org-agenda-files (list "c:/Users/GorkaEraña/Dropbox/emacs/work/client_projects/novo_nordisk/we-publish.org"))
-  )
-
-(use-package org-bullets 
-  :ensure t
-  :config 
-  (setq org-bullets-bullet-list '("•"))
-  (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
-
-(use-package emacsql-sqlite :ensure t)
-
-(use-package org-roam
-  :ensure t
-  :custom (org-roam-directory "c:/Users/GorkaEraña/Dropbox/roam_notes")
-  :bind (("C-c n l" . org-roam-buffer-toggle)
-         ("C-c n f" . org-roam-node-find)
-         ("C-c n i" . org-roam-node-insert))
-  :config (org-roam-setup))
+  (setq org-todo-keywords '((sequence
+                            "TODO"
+                            "IN-PROGRESS"
+                            "WAITING"
+                            "CANCELLED"
+                            "DONE"))
+        org-todo-keyword-faces '(("TODO" . "white")
+                                 ("IN-PROGRESS" . "orange")
+                                 ("WAITING" . "red")
+                                 ("CANCELLED" . "black")
+                                 ("DONE" . "green")))
+  ;; Linking shortcuts
+  (global-set-key (kbd "C-c l") 'org-store-link)
+  (global-set-key (kbd "C-c C-l") 'org-insert-link)
+  (global-set-key (kbd "C-c a") 'org-agenda))
 
 (use-package elpy
   :ensure t
@@ -165,16 +137,16 @@
   :commands lsp)
 
 ;; optionally
-;; (use-package lsp-ui :commands lsp-ui-mode)
+(use-package lsp-ui :commands lsp-ui-mode)
 
 ;; optionally if you want to use debugger
-;; (use-package dap-mode)
-;; (use-package dap-LANGUAGE) to load the dap adapter for your language
+(use-package dap-mode :ensure t)
+(use-package dap-python :ensure t) ;; to load the dap adapter for your language
 
 ;; optional if you want which-key integration
-;; (use-package which-key
-;;     :config
-;;     (which-key-mode))
+(use-package which-key
+  :config
+  (which-key-mode))
 
 (use-package markdown-mode :ensure t)
 
@@ -188,37 +160,9 @@
   (global-set-key [f8] 'neotree-toggle)
   (setq-default neo-show-hidden-files t))
 
-(require 'cl-lib)
-
-(defun filter-if-string-contained (list string)
-  ;; Filters for items in 'list' containing 'string'
-  ;; E.g., (filter-if-string-contained ("abc" "def") "a") -> ("abc")
-  (cl-remove-if-not
-   (lambda (s) (string-match string s))
-   list))
-
-(use-package vterm
-  :ensure t
-  :load-path (car
-              (filter-if-string-contained
-               ;; Within the subdirectory returned below, find the first file
-               ;; with extension ".so"
-               (directory-files
-                ;; First look for the subdirectories within "elpa" that contain
-                ;; the substring "vterm", and fetch the first result's full path
-                (car (filter-if-string-contained (directory-files "./elpa" t) "vterm"))
-                t)
-               ".so"))
-  )
+(use-package vterm :ensure t)
 
 (use-package magit :ensure t)
-
-(use-package paren
-  :config
-  (show-paren-mode 1)
-  (setq show-paren-style 'parenthesis)
-  (setq show-paren-when-point-in-periphery t)
-  (setq show-paren-when-point-inside-paren t))
 
 (if (eq system-type 'windows-nt)
     (progn
@@ -231,3 +175,10 @@
 (prefer-coding-system 'utf-8)
 
 (use-package org-make-toc :ensure t)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   '(magit vterm dap-python dap-mode org-make-toc neotree clojure-mode yaml-mode markdown-mode flycheck blacken py-autopep8 elpy org-roam emacsql-sqlite org-bullets rainbow-delimiters material-theme use-package)))
