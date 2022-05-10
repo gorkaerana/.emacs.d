@@ -21,11 +21,7 @@
   :config (load-theme 'material t))
 
 (custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(default ((t (:height 160 :family "Hack")))))
+  '(default ((t (:height 160 :family "Hack")))))
 
 (use-package rainbow-delimiters
   :ensure t
@@ -154,6 +150,8 @@
 
 (use-package clojure-mode :ensure t)
 
+(use-package julia-mode :ensure t)
+
 (use-package neotree
   :ensure t
   :init
@@ -175,10 +173,3 @@
 (prefer-coding-system 'utf-8)
 
 (use-package org-make-toc :ensure t)
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   '(magit vterm dap-python dap-mode org-make-toc neotree clojure-mode yaml-mode markdown-mode flycheck blacken py-autopep8 elpy org-roam emacsql-sqlite org-bullets rainbow-delimiters material-theme use-package)))

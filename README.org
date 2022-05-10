@@ -38,6 +38,7 @@
   - [[#markdown-mode][markdown-mode]]
   - [[#yaml-mode][yaml-mode]]
   - [[#clojure-mode][Clojure mode]]
+  - [[#julia-mode][Julia mode]]
   - [[#emacs-neotree][emacs-neotree]]
   - [[#emacs-libvterm][emacs-libvterm]]
   - [[#magit][Magit]]
@@ -265,6 +266,10 @@ Flycheck is not exclusive to Python, but it is set up only for it since I mainly
 ** [[https://github.com/clojure-emacs/clojure-mode/][Clojure mode]]
 #+begin_src emacs-lisp
 (use-package clojure-mode :ensure t)
+#+end_src
+** [[https://github.com/JuliaEditorSupport/julia-emacs][Julia mode]]
+#+begin_src emacs-lisp
+(use-package julia-mode :ensure t)
 #+end_src
 ** [[https://github.com/jaypei/emacs-neotree][emacs-neotree]]
 #+begin_src emacs-lisp
