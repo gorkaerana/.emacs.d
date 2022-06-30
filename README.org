@@ -171,7 +171,6 @@ Enable line numbers globally, format them, and add a solid vertical bar.
 (setq linum-format "%4d\u2502")
 #+end_src
 * Org Mode
-** Setup
 #+begin_src emacs-lisp
 (use-package org
   :ensure t
@@ -193,7 +192,13 @@ Enable line numbers globally, format them, and add a solid vertical bar.
   ;; Linking shortcuts
   (global-set-key (kbd "C-c l") 'org-store-link)
   (global-set-key (kbd "C-c C-l") 'org-insert-link)
-  (global-set-key (kbd "C-c a") 'org-agenda))
+  (global-set-key (kbd "C-c a") 'org-agenda)
+)
+#+end_src
+
+Make marking a ~TODO~ item as ~DONE~ create a ~CLOSING~ timestamp.
+#+begin_src emacs-lisp
+(setq org-log-done 'time)
 #+end_src
 * Python IDE packages
 ** [[https://github.com/jorgenschaefer/elpy][Elpy]]

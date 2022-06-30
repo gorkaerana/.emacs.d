@@ -104,11 +104,14 @@
   ;; Linking shortcuts
   (global-set-key (kbd "C-c l") 'org-store-link)
   (global-set-key (kbd "C-c C-l") 'org-insert-link)
-  (global-set-key (kbd "C-c a") 'org-agenda))
+  (global-set-key (kbd "C-c a") 'org-agenda)
+)
 
-(use-package elpy
-  :ensure t
-  :init (elpy-enable))
+(setq org-log-done 'time)
+
+;; (use-package elpy
+;;   :ensure t
+;;   :init (elpy-enable))
 
 (use-package py-autopep8
   :ensure t
@@ -141,12 +144,12 @@
 
 ;; optionally if you want to use debugger
 (use-package dap-mode :ensure t)
-(use-package dap-python :ensure t) ;; to load the dap adapter for your language
+;; (use-package dap-python :ensure t) ;; to load the dap adapter for your language
 
 ;; optional if you want which-key integration
-(use-package which-key
-  :config
-  (which-key-mode))
+;; (use-package which-key
+;;   :config
+;;   (which-key-mode))
 
 (use-package markdown-mode :ensure t)
 
@@ -160,9 +163,9 @@
   (global-set-key [f8] 'neotree-toggle)
   (setq-default neo-show-hidden-files t))
 
-(use-package vterm :ensure t)
+;; (use-package vterm :ensure t)
 
-(use-package magit :ensure t)
+;; (use-package magit :ensure t)
 
 (if (eq system-type 'windows-nt)
     (progn
@@ -181,4 +184,4 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(magit vterm dap-python dap-mode org-make-toc neotree clojure-mode yaml-mode markdown-mode flycheck blacken py-autopep8 elpy org-roam emacsql-sqlite org-bullets rainbow-delimiters material-theme use-package)))
+   '(magit vterm dap-python yaml-mode use-package rainbow-delimiters py-autopep8 org-roam org-make-toc org-bullets neotree material-theme git-commit flycheck elpy dap-mode clojure-mode blacken)))
