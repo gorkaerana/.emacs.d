@@ -2,15 +2,17 @@
 #+TITLE: Literate emacs init
 #+AUTHOR: Gorka Eraña
 #+EMAIL: eranagorka@gmail.com
-#+DATE: <2022-04-25 ma>
+#+DATE: <2021-05-12 Wed>
 #+CREATED: 2021-05-12
 #+STARTUP: hidestars indent overview
 #+PROPERTY: header-args :results silent :tangle "./init.el"
 #+OPTIONS: toc:2
 
+Create ~init.el~ by tangling the contents of the code blocks: "C-c C-v t" (~org-babel-tangle~).
+
 * Table of contents
 :PROPERTIES:
-:TOC:      :depth 2 :include all
+:TOC: :include all :depth 2
 :END:
 :CONTENTS:
 - [[#table-of-contents][Table of contents]]
@@ -21,12 +23,13 @@
   - [[#theme][Theme]]
   - [[#font][Font]]
   - [[#rainbow-delimiters][Rainbow delimiters]]
-  - [[#pretty-bullets][Pretty bullets]]
   - [[#ruler-at-80-characters][Ruler at 80 characters]]
   - [[#mode-line][Mode line]]
   - [[#miscellaneous][Miscellaneous]]
 - [[#org-mode][Org Mode]]
   - [[#setup][Setup]]
+  - [[#create-a-closing-timestamp-when-marking-a-to-do-item-as-done][Create a "closing" timestamp when marking a to-do item as "done"]]
+  - [[#pretty-bullets][Pretty bullets]]
 - [[#python-ide-packages][Python IDE packages]]
   - [[#elpy][Elpy]]
   - [[#py-autopep8][py-autopep8]]
@@ -42,51 +45,52 @@
   - [[#emacs-neotree][emacs-neotree]]
   - [[#emacs-libvterm][emacs-libvterm]]
   - [[#magit][Magit]]
+  - [[#paren-mode][Paren mode]]
 - [[#miscellaneous][Miscellaneous]]
   - [[#normal-copy-pasting-in-windows][Normal copy-pasting in Windows]]
   - [[#org-make-toc][org-make-toc]]
 :END:
 * Preface
-Let be a chosen version of Emacs ~MM.m~, where ~MM~ stands for the major version and ~m~ for the minor version. As of writing this document, 28.1 is the chosen one.
-
-For Windows, this guide assumes both ~emacs-{MM}-deps.zip~ and ~emacs-{MM.m}-no-deps.zip~ have been downloaded and unzipped, and the contents of the first one have been placed into the second one's ~bin~ directory (as per [[https://gist.github.com/okorz001/7715b40104ed0446bd228b40d7876674][this gist]]). Alternatively, and more easily, it can be installed via  ~emacs-28.1-installer.exe~.
-
-Create ~init.el~ by tangling the contents of the code blocks: "C-c C-v t" (~org-babel-tangle~).
 ** Package infrastructure initialization
+Enables basic package supporting.
 #+begin_src emacs-lisp
-;; Enables basic package supporting
 (require 'package)
+#+end_src
 
-;; Add several archives to list of available repositories
-(add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/"))
-(add-to-list 'package-archives '("stable-melpa" . "https://stable.melpa.org/packages/"))
-(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
-(add-to-list 'package-archives '("gnu" . "https://elpa.gnu.org/packages/"))
-
-;; Initialize the package infrastructure
+Initialize the package infrastructure.
+#+begin_src emacs-lisp
 (package-initialize)
+#+end_src
+
+Add several archives to list of available repositories.
+#+begin_src emacs-lisp
+(setq package-archives
+      '(("org" . "https://orgmode.org/elpa/")
+      ("stable-melpa" . "https://stable.melpa.org/packages/")
+      ("melpa" . "https://melpa.org/packages/")
+      ("gnu" . "https://elpa.gnu.org/packages/")))
 #+end_src
 ** Set-up ~use-package~
 #+begin_src emacs-lisp
-(unless (package-installed-p 'use-package)
-  (package-refresh-contents)
-  (package-install 'use-package))
-(require 'use-package)
-(eval-when-compile (require 'use-package))
+  (unless (package-installed-p 'use-package)
+    (package-refresh-contents)
+    (package-install 'use-package))
+  (require 'use-package)
+  (eval-when-compile (require 'use-package))
 #+end_src
 * Aesthetics
 ** Theme
-I still haven't been able to figure out when to use ~use-package~ or ~load-theme~ in this context.
+I'm still to figure out when to use ~use-package~ or ~load-theme~ in this context.
 #+begin_src emacs-lisp
 (use-package material-theme
   :ensure t
   :config (load-theme 'material t))
 #+end_src
 ** Font
-Absolutely always [[https://sourcefoundry.org/hack/][Hack]].
+Absolutely always [[https://sourcefoundry.org/hack/][Hack]]. It needs to be installed in the machine.
 #+begin_src emacs-lisp
 (custom-set-faces
-  '(default ((t (:height 160 :family "Hack")))))
+ '(default ((t (:height 160 :family "Hack")))))
 #+end_src
 ** Rainbow delimiters
 #+begin_src emacs-lisp
@@ -94,82 +98,94 @@ Absolutely always [[https://sourcefoundry.org/hack/][Hack]].
   :ensure t
   :init (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
 #+end_src
-** Pretty bullets
-[[https://github.com/sabof/org-bullets][org-bullets]] is a package that allows to substitute the asterisks in org-mode for UTF-8 characters. The availability of the bullets depends on how well UTF-8 is supported on the given machine that Emacs happens to be installed in, so ~org-bullets-bullet-list~ might vary from machine to machine. A searchable (and user-friendly) webpage that would make finding bullets more easy is available [[https://unicode-table.com/en/][here]].
-#+begin_src emacs-lisp
-(use-package org-bullets 
-  :ensure t
-  :config 
-  (setq org-bullets-bullet-list '("○" "•" "·"))
-  (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
-)
-#+end_src
 ** Ruler at 80 characters
 ~display-fill-column-indicator-mode~ was introduced with Emacs 27, so the version ought to be checked before adding the hook.
 #+begin_src emacs-lisp
-(if (version< "27.0" emacs-version)
-    (add-hook 'prog-mode-hook #'display-fill-column-indicator-mode))
+  (if (version< "27.0" emacs-version)
+      (progn
+        (add-hook 'prog-mode-hook #'display-fill-column-indicator-mode)
+        (setq-default display-fill-column-indicator-column 80))
+    )
 #+end_src
 ** [[http://www.gnu.org/software/emacs/manual/html_node/emacs/Mode-Line.html][Mode line]]
 The following code chunk follows an incredibly helpful [[https://emacs-fu.blogspot.com/2011/08/customizing-mode-line.html][blog post]] from Emacs-fu.
 #+begin_src emacs-lisp
 (setq-default mode-line-format
-  (list
-    ;; The buffer name, equals file name
-    '(:eval (propertize " %b" 'face 'font-lock-keyword-face 'help-echo (buffer-file-name)))
+	      (list
+	       ;; The buffer name, equals file name
+	       '(:eval
+		 (propertize
+		  " %b"
+		  'face
+		  'font-lock-keyword-face
+		  'help-echo
+		  (buffer-file-name)))
 
-    " — "
-      
-    ;; Line and column
-    "("
-    (propertize "%02l" 'face 'font-lock-face-type)
-    ","
-    (propertize "%02c" 'face 'font-lock-face-type)
-    ") "
+	       " — "
 
-    ;; Relative position, size of file
-    (propertize "%p" 'face 'font-lock-constant-face)
+	       ;; Line and column
+	       "("
+	       (propertize "%02l" 'face 'font-lock-face-type)
+	       ","
+	       (propertize "%02c" 'face 'font-lock-face-type)
+	       ") "
 
-    ;; Fill with dashes
-    " — "
+	       ;; Relative position, size of file
+	       (propertize "%p" 'face 'font-lock-constant-face)
 
-    ;; Major mode of buffer
-    "["
-    '(:eval (propertize "%m" 'face 'font-lock-string-face 'help-echo buffer-file-coding-system))
-    "] "
+	       ;; Fill with dashes
+	       " — "
 
-    ;; Minor modes
-    "["
-    minor-mode-alist
-    "]"
 
-  ))
+	       ;; Major mode of buffer
+	       "["
+	       '(:eval
+		 (propertize
+		  "%m"
+		  'face
+		  'font-lock-string-face
+		  'help-echo
+		  buffer-file-coding-system))
+	       "] "
+
+	       ;; Minor modes
+	       "["
+	       minor-mode-alist
+	       "]"
+
+	       ))
 #+end_src
 ** Miscellaneous
 Disable menu bar.
 #+begin_src emacs-lisp
-(menu-bar-mode -1)
+  (menu-bar-mode -1)
 #+end_src
 
 Disable tool bar.
 #+begin_src emacs-lisp
-(tool-bar-mode -1)
+  (tool-bar-mode -1)
 #+end_src
 
 Hide startup message.
 #+begin_src emacs-lisp
-(setq inhibit-startup-message t)
+  (setq inhibit-startup-message t)
 #+end_src
 
 Hide splash screen.
 #+begin_src emacs-lisp
-(setq inhibit-splash-screen t)
+  (setq inhibit-splash-screen t)
 #+end_src
 
-Enable line numbers globally, format them, and add a solid vertical bar.
+Enable line numbers (for every file extension but ~.org~), format them, and add a solid vertical bar.
 #+begin_src emacs-lisp
-(global-linum-mode t)
-(setq linum-format "%4d\u2502")
+  ;; (global-linum-mode t)
+  (setq linum-format "%4d\u2502")
+  (define-globalized-minor-mode my-global-linum-mode linum-mode
+    (lambda ()
+      (unless (or (minibufferp)
+                  (derived-mode-p 'org-mode))
+        (linum-mode 1))))
+  (my-global-linum-mode t)
 #+end_src
 * Org Mode
 ** Setup
@@ -180,21 +196,36 @@ Enable line numbers globally, format them, and add a solid vertical bar.
   :config
   (setq org-startup-truncated t)
   ;; Custom todo keyword sequence and colours
-  (setq org-todo-keywords '((sequence
-                            "TODO"
-                            "IN-PROGRESS"
-                            "WAITING"
-                            "CANCELLED"
-                            "DONE"))
-        org-todo-keyword-faces '(("TODO" . "white")
-                                 ("IN-PROGRESS" . "orange")
-                                 ("WAITING" . "red")
-                                 ("CANCELLED" . "black")
-                                 ("DONE" . "green")))
+  (setq org-todo-keywords
+	'((sequence
+           "TODO"
+           "IN-PROGRESS"
+           "WAITING"
+           "CANCELLED"
+           "DONE"))
+        org-todo-keyword-faces
+	'(("TODO" . "white")
+          ("IN-PROGRESS" . "orange")
+          ("WAITING" . "red")
+          ("CANCELLED" . "black")
+          ("DONE" . "green")))
   ;; Linking shortcuts
   (global-set-key (kbd "C-c l") 'org-store-link)
   (global-set-key (kbd "C-c C-l") 'org-insert-link)
   (global-set-key (kbd "C-c a") 'org-agenda))
+#+end_src
+** [[https://emacs.stackexchange.com/questions/47951/marking-a-todo-item-done-does-not-create-a-closing-timestamp-in-org-mode][Create a "closing" timestamp when marking a to-do item as "done"]]
+#+begin_src emacs-lisp
+(setq org-log-done 'time)
+#+end_src
+** Pretty bullets
+[[https://github.com/sabof/org-bullets][org-bullets]] is a package that allows to substitute the asterisks in org-mode for UTF-8 characters. The availability of the bullets depends on how well UTF-8 is supported on the given machine that Emacs happens to be installed in, so ~org-bullets-bullet-list~ might vary from machine to machine. A searchable (and user-friendly) webpage that would make finding bullets more easy is available [[https://unicode-table.com/en/][here]].
+#+begin_src emacs-lisp
+(use-package org-bullets 
+  :ensure t
+  :config 
+  (setq org-bullets-bullet-list '("•"))
+  (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
 #+end_src
 * Python IDE packages
 ** [[https://github.com/jorgenschaefer/elpy][Elpy]]
@@ -243,16 +274,16 @@ Flycheck is not exclusive to Python, but it is set up only for it since I mainly
   :commands lsp)
 
 ;; optionally
-(use-package lsp-ui :commands lsp-ui-mode)
+;; (use-package lsp-ui :commands lsp-ui-mode)
 
 ;; optionally if you want to use debugger
-(use-package dap-mode :ensure t)
-(use-package dap-python :ensure t) ;; to load the dap adapter for your language
+;; (use-package dap-mode)
+;; (use-package dap-LANGUAGE) to load the dap adapter for your language
 
 ;; optional if you want which-key integration
-(use-package which-key
-  :config
-  (which-key-mode))
+;; (use-package which-key
+;;     :config
+;;     (which-key-mode))
 #+end_src
 * Various IDE packages
 ** [[https://www.emacswiki.org/emacs/MarkdownMode][markdown-mode]]
@@ -280,14 +311,44 @@ Flycheck is not exclusive to Python, but it is set up only for it since I mainly
   (setq-default neo-show-hidden-files t))
 #+end_src
 ** [[https://github.com/akermu/emacs-libvterm][emacs-libvterm]]
-Terminal emulation using ~emacs-libvterm~. Requires a [[https://cmake.org/download/][CMake]] installation.
+Terminal emulation using ~emacs-libvterm~.
 #+begin_src emacs-lisp
-(use-package vterm :ensure t)
+  (require 'cl-lib)
+
+  (defun filter-if-string-contained (list string)
+    ;; Filters for items in 'list' containing 'string'
+    ;; E.g., (filter-if-string-contained ("abc" "def") "a") -> ("abc")
+    (cl-remove-if-not
+     (lambda (s) (string-match string s))
+     list))
+
+  (use-package vterm
+    :ensure t
+    ;; :load-path (car
+    ;;             (filter-if-string-contained
+    ;;              ;; Within the subdirectory returned below, find the first file
+    ;;              ;; with extension ".so"
+    ;;              (directory-files
+    ;;               ;; First look for the subdirectories within "elpa" that contain
+    ;;               ;; the substring "vterm", and fetch the first result's full path
+    ;;               (car (filter-if-string-contained (directory-files "./elpa" t) "vterm"))
+    ;;               t)
+    ;;              ".so"))
+    )
 #+end_src
 ** [[https://magit.vc/][Magit]]
-Requires [[https://git-scm.com/][Git]] to be installed and to be in the PATH environment variable.
 #+begin_src emacs-lisp
 (use-package magit :ensure t)
+#+end_src
+** [[https://www.emacswiki.org/emacs/ParenSetMode][Paren mode]]
+Highlight content inside parentheses, brackets and square brackets.
+#+begin_src emacs-lisp
+(use-package paren
+  :config
+  (show-paren-mode 1)
+  (setq show-paren-style 'parenthesis)
+  (setq show-paren-when-point-in-periphery t)
+  (setq show-paren-when-point-inside-paren t))
 #+end_src
 * Miscellaneous
 ** Normal copy-pasting in Windows
@@ -304,12 +365,17 @@ I believe copy-pasting (in the Emacs sense of it) stopped to working with Emacs 
 (prefer-coding-system 'utf-8)
 #+end_src
 ** [[https://github.com/alphapapa/org-make-toc][org-make-toc]]
-As per the "Usage" section in the README of the link in the header of this subsection, follow the next steps to insert a basic TOC:
-1. Choose a heading to contain a TOC and move the point to it.
-2. Run command ~org-make-toc-insert~, which inserts a :CONTENTS: drawer and sets TOC properties. Set the include property to all.
-3. Run the command ~org-make-toc~ to update all TOCs in the document.
+"Usage" section in the README of the link in the header of this subsection describes well how to use this package. Quoting it:
 
-Nevertheless, the second step I had to modify all reduce :PROPERTIES: to just ~:include all~ and ~:depth 2~.
+=To make a basic TOC, follow these steps:=
+
+1. =Choose a heading to contain a TOC and move the point to it.=
+2. =Run command org-make-toc-insert, which inserts a :CONTENTS: drawer and sets TOC properties. Set the include property to all.=
+3. =Run the command org-make-toc to update all TOCs in the document.=
+
+=Use command org-make-toc-set to change TOC properties for the entry at point with completion.=
+
+Nevertheless, after running ~org-make-toc-insert~ I had to remove all TOC properties but ~:include all~ and ~:depth 2~ to customize the table of contents to my liking.
 #+begin_src emacs-lisp
 (use-package org-make-toc :ensure t)
 #+end_src
