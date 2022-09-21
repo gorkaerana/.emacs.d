@@ -190,6 +190,24 @@ Enable line numbers (for every file extension but ~.org~), format them, and add 
 * Org Mode
 ** Setup
 #+begin_src emacs-lisp
+(require 'find-lisp)
+
+(defun is-org-file (fname parentdir)
+  (string-match "\\.org$" fname))
+
+(defun is-dropbox-dir (fname parentdir)
+  ;; Matches everything under "c:/Users/GorkaEraña/Dropbox/emacs"
+  (or
+   (string-equal "Users" fname)
+   (string-equal "GorkaEraña" fname)
+   (string-equal "Dropbox" fname)
+   (string-equal "emacs" fname)
+   (and
+    (string-match "^c:/Users/GorkaEraña/Dropbox/emacs" parentdir)
+    ;; Avoid infinite recursion by traversing "." and ".."
+    (not (string-equal "." fname))
+    (not (string-equal ".." fname)))))
+
 (use-package org
   :ensure t
   :mode ("\\.org$" . org-mode)
@@ -197,22 +215,20 @@ Enable line numbers (for every file extension but ~.org~), format them, and add 
   (setq org-startup-truncated t)
   ;; Custom todo keyword sequence and colours
   (setq org-todo-keywords
-	'((sequence
-           "TODO"
-           "IN-PROGRESS"
-           "WAITING"
-           "CANCELLED"
-           "DONE"))
-        org-todo-keyword-faces
-	'(("TODO" . "white")
-          ("IN-PROGRESS" . "orange")
-          ("WAITING" . "red")
-          ("CANCELLED" . "black")
-          ("DONE" . "green")))
+	'((sequence "TODO" "IN-PROGRESS" "WAITING" "CANCELLED" "DONE")))
+  (setq org-todo-keyword-faces
+	'(("TODO" . "white") ("IN-PROGRESS" . "orange") ("WAITING" . "red")
+	  ("CANCELLED" . "black") ("DONE" . "green")))
   ;; Linking shortcuts
   (global-set-key (kbd "C-c l") 'org-store-link)
   (global-set-key (kbd "C-c C-l") 'org-insert-link)
-  (global-set-key (kbd "C-c a") 'org-agenda))
+  (global-set-key (kbd "C-c a") 'org-agenda)
+  ;; Files for agenda mode
+  (setq org-agenda-files (find-lisp-find-files-internal
+			  "c:/"
+			  'is-org-file
+			  'is-dropbox-dir))
+)
 #+end_src
 ** [[https://emacs.stackexchange.com/questions/47951/marking-a-todo-item-done-does-not-create-a-closing-timestamp-in-org-mode][Create a "closing" timestamp when marking a to-do item as "done"]]
 #+begin_src emacs-lisp
