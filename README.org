@@ -66,9 +66,9 @@ Add several archives to list of available repositories.
 #+begin_src emacs-lisp
 (setq package-archives
       '(("org" . "https://orgmode.org/elpa/")
-      ("stable-melpa" . "https://stable.melpa.org/packages/")
-      ("melpa" . "https://melpa.org/packages/")
-      ("gnu" . "https://elpa.gnu.org/packages/")))
+        ("stable-melpa" . "https://stable.melpa.org/packages/")
+        ("melpa" . "https://melpa.org/packages/")
+        ("gnu" . "https://elpa.gnu.org/packages/")))
 #+end_src
 ** Set-up ~use-package~
 #+begin_src emacs-lisp
@@ -338,12 +338,15 @@ Flycheck is not exclusive to Python, but it is set up only for it since I mainly
 ** [[https://github.com/akermu/emacs-libvterm][emacs-libvterm]]
 Terminal emulation using ~emacs-libvterm~.
 #+begin_src emacs-lisp
-  (use-package vterm
-    :ensure t)
+;; TODO: figure out on Windows
+(if (not (eq system-type 'windows-nt))
+    (use-package vterm :ensure t))
 #+end_src
 ** [[https://magit.vc/][Magit]]
 #+begin_src emacs-lisp
-(use-package magit :ensure t)
+;; TODO: figure out on Windows
+(if (not (eq system-type 'windows-nt))
+  (use-package magit :ensure t))
 #+end_src
 ** [[https://www.emacswiki.org/emacs/ParenSetMode][Paren mode]]
 Highlight content inside parentheses, brackets and square brackets.
