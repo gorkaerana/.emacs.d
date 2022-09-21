@@ -192,11 +192,13 @@ Enable line numbers (for every file extension but ~.org~), format them, and add 
 #+begin_src emacs-lisp
 (require 'find-lisp)
 
-(defun is-org-file (fname parentdir)
-  (string-match "\\.org$" fname))
+(defun is-work-org-file (fname parentdir)
+  (and
+   (string-match "\\.org$" fname)
+   (string-match "work" parentdir)))
 
 (defun is-dropbox-dir (fname parentdir)
-  ;; Matches everything under "c:/Users/GorkaEraña/Dropbox/emacs"
+  ;; Matches everything under "c:/Users/GorkaEraña/Dropbox/emacs/work"
   (or
    (string-equal "Users" fname)
    (string-equal "GorkaEraña" fname)
@@ -226,8 +228,10 @@ Enable line numbers (for every file extension but ~.org~), format them, and add 
   ;; Files for agenda mode
   (setq org-agenda-files (find-lisp-find-files-internal
 			  "c:/"
-			  'is-org-file
+			  'is-work-org-file
 			  'is-dropbox-dir))
+  (setq org-agenda-skip-function-global 
+	'(org-agenda-skip-entry-if 'todo '("DONE" "CANCELLED")))
 )
 #+end_src
 ** [[https://emacs.stackexchange.com/questions/47951/marking-a-todo-item-done-does-not-create-a-closing-timestamp-in-org-mode][Create a "closing" timestamp when marking a to-do item as "done"]]
