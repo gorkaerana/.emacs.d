@@ -28,7 +28,6 @@ Create ~init.el~ by tangling the contents of the code blocks: "C-c C-v t" (~org-
   - [[#miscellaneous][Miscellaneous]]
 - [[#org-mode][Org Mode]]
   - [[#setup][Setup]]
-  - [[#create-a-closing-timestamp-when-marking-a-to-do-item-as-done][Create a "closing" timestamp when marking a to-do item as "done"]]
   - [[#pretty-bullets][Pretty bullets]]
 - [[#python-ide-packages][Python IDE packages]]
   - [[#elpy][Elpy]]
@@ -42,6 +41,7 @@ Create ~init.el~ by tangling the contents of the code blocks: "C-c C-v t" (~org-
   - [[#yaml-mode][yaml-mode]]
   - [[#clojure-mode][Clojure mode]]
   - [[#julia-mode][Julia mode]]
+  - [[#typescript-mode][Typescript mode]]
   - [[#emacs-neotree][emacs-neotree]]
   - [[#emacs-libvterm][emacs-libvterm]]
   - [[#magit][Magit]]
@@ -199,6 +199,7 @@ Enable line numbers (for every file extension but ~.org~), format them, and add 
 
 (defun is-dropbox-dir (fname parentdir)
   ;; Matches everything under "c:/Users/GorkaEraña/Dropbox/emacs/work"
+  ;; TODO: generalize above path to all my devices
   (or
    (string-equal "Users" fname)
    (string-equal "GorkaEraña" fname)
@@ -217,26 +218,25 @@ Enable line numbers (for every file extension but ~.org~), format them, and add 
   (setq org-startup-truncated t)
   ;; Custom todo keyword sequence and colours
   (setq org-todo-keywords
-	'((sequence "TODO" "IN-PROGRESS" "WAITING" "CANCELLED" "DONE")))
+        '((sequence "TODO" "IN-PROGRESS" "WAITING" "CANCELLED" "DONE")))
   (setq org-todo-keyword-faces
-	'(("TODO" . "white") ("IN-PROGRESS" . "orange") ("WAITING" . "red")
-	  ("CANCELLED" . "black") ("DONE" . "green")))
+        '(("TODO" . "white") ("IN-PROGRESS" . "orange") ("WAITING" . "red")
+          ("CANCELLED" . "black") ("DONE" . "green")))
   ;; Linking shortcuts
   (global-set-key (kbd "C-c l") 'org-store-link)
   (global-set-key (kbd "C-c C-l") 'org-insert-link)
   (global-set-key (kbd "C-c a") 'org-agenda)
   ;; Files for agenda mode
   (setq org-agenda-files (find-lisp-find-files-internal
-			  "c:/"
-			  'is-work-org-file
-			  'is-dropbox-dir))
+                          "c:/"
+                          'is-work-org-file
+                          'is-dropbox-dir))
   (setq org-agenda-skip-function-global 
-	'(org-agenda-skip-entry-if 'todo '("DONE" "CANCELLED")))
-)
-#+end_src
-** [[https://emacs.stackexchange.com/questions/47951/marking-a-todo-item-done-does-not-create-a-closing-timestamp-in-org-mode][Create a "closing" timestamp when marking a to-do item as "done"]]
-#+begin_src emacs-lisp
-(setq org-log-done 'time)
+        '(org-agenda-skip-entry-if 'todo '("DONE" "CANCELLED")))
+  ;; Create a CLOSED timestamp when marking an entry DONE. See: https://emacs.stackexchange.com/questions/47951/marking-a-todo-item-done-does-not-create-a-closing-timestamp-in-org-mode
+  (setq org-log-done 'time)
+  (setq org-agenda-window-setup 'only-windows)
+  )
 #+end_src
 ** Pretty bullets
 [[https://github.com/sabof/org-bullets][org-bullets]] is a package that allows to substitute the asterisks in org-mode for UTF-8 characters. The availability of the bullets depends on how well UTF-8 is supported on the given machine that Emacs happens to be installed in, so ~org-bullets-bullet-list~ might vary from machine to machine. A searchable (and user-friendly) webpage that would make finding bullets more easy is available [[https://unicode-table.com/en/][here]].
