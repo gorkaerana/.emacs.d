@@ -192,24 +192,41 @@ Enable line numbers (for every file extension but ~.org~), format them, and add 
 #+begin_src emacs-lisp
 (require 'find-lisp)
 
+(defun all (seq) (cl-reduce (lambda (a b) (and a b)) seq))
+
+(defun any (seq) (cl-reduce (lambda (a b) (or a b)) seq))
+
 (defun is-work-org-file (fname parentdir)
+  "Heuristic to determine whether a filepath (separated into 'parentdir' and 'fname') is a '.org' file under directory tree 'work'"
   (and
    (string-match "\\.org$" fname)
    (string-match "work" parentdir)))
 
-(defun is-dropbox-dir (fname parentdir)
-  ;; Matches everything under "c:/Users/GorkaEraña/Dropbox/emacs/work"
-  ;; TODO: generalize above path to all my devices
-  (or
-   (string-equal "Users" fname)
-   (string-equal "GorkaEraña" fname)
-   (string-equal "Dropbox" fname)
-   (string-equal "emacs" fname)
+(defun name-and-parent-belong-to (fname parentdir path)
+  "Checks whether:
+1. Any of the individual parts of 'path' equal 'fname'.
+2. Or, 'parentdir' starts with 'path'.
+"
+   (or
+    (any
+     (mapcar
+      (apply-partially 'string-equal fname)
+      (cdr (split-string path "/"))))
+    (and
+     (string-match (string-join (vector "^" path)) parentdir))))
+
+(defun is-dropbox-emacs-dir (fname parentdir)
+  "Heuristic determining whether a filepath (separated into 'parentdir' and 'fname') is under the 'Dropbox/emacs' directory"
+  (and
+   ;; Avoid infinite recursion
    (and
-    (string-match "^c:/Users/GorkaEraña/Dropbox/emacs" parentdir)
-    ;; Avoid infinite recursion by traversing "." and ".."
     (not (string-equal "." fname))
-    (not (string-equal ".." fname)))))
+    (not (string-equal ".." fname)))
+   (any
+    (mapcar
+     (apply-partially 'name-and-parent-belong-to fname parentdir)
+     ;; Work and home
+     ["c:/Users/GorkaEraña/Dropbox/emacs" "/home/gorka/Dropbox/emacs"]))))
 
 (use-package org
   :ensure t
@@ -228,9 +245,9 @@ Enable line numbers (for every file extension but ~.org~), format them, and add 
   (global-set-key (kbd "C-c a") 'org-agenda)
   ;; Files for agenda mode
   (setq org-agenda-files (find-lisp-find-files-internal
-                          "c:/"
+                          (if (eq system-type 'windows-nt) "c:/" "/")
                           'is-work-org-file
-                          'is-dropbox-dir))
+                          'is-dropbox-emacs-dir))
   (setq org-agenda-skip-function-global 
         '(org-agenda-skip-entry-if 'todo '("DONE" "CANCELLED")))
   ;; Create a CLOSED timestamp when marking an entry DONE. See: https://emacs.stackexchange.com/questions/47951/marking-a-todo-item-done-does-not-create-a-closing-timestamp-in-org-mode
