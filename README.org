@@ -207,13 +207,13 @@ Enable line numbers (for every file extension but ~.org~), format them, and add 
 1. Any of the individual parts of 'path' equal 'fname'.
 2. Or, 'parentdir' starts with 'path'.
 "
-   (or
-    (any
-     (mapcar
-      (apply-partially 'string-equal fname)
-      (cdr (split-string path "/"))))
-    (and
-     (string-match (string-join (vector "^" path)) parentdir))))
+  (or
+   (any
+    (mapcar
+     (apply-partially 'string-equal fname)
+     (cdr (split-string path "/"))))
+   (and
+    (string-match (string-join (vector "^" path)) parentdir))))
 
 (defun is-dropbox-emacs-dir (fname parentdir)
   "Heuristic determining whether a filepath (separated into 'parentdir' and 'fname') is under the 'Dropbox/emacs' directory"
@@ -244,15 +244,15 @@ Enable line numbers (for every file extension but ~.org~), format them, and add 
   (global-set-key (kbd "C-c C-l") 'org-insert-link)
   (global-set-key (kbd "C-c a") 'org-agenda)
   ;; Files for agenda mode
-  (setq org-agenda-files
-        (find-lisp-find-files-internal
-         (if (eq system-type 'windows-nt) "c:/" "/")
-         'is-work-org-file
-         'is-dropbox-emacs-dir))
+  (setq org-agenda-files (find-lisp-find-files-internal
+			  (if (eq system-type 'windows-nt) "c:/" "/")
+			  'is-work-org-file
+			  'is-dropbox-emacs-dir))
   (setq org-agenda-skip-function-global 
         '(org-agenda-skip-entry-if 'todo '("DONE" "CANCELLED")))
   ;; Create a CLOSED timestamp when marking an entry DONE. See: https://emacs.stackexchange.com/questions/47951/marking-a-todo-item-done-does-not-create-a-closing-timestamp-in-org-mode
   (setq org-log-done 'time)
+  ;; Agenda in full window  
   (setq org-agenda-window-setup 'only-windows)
   )
 #+end_src
