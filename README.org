@@ -89,8 +89,7 @@ I'm still to figure out when to use ~use-package~ or ~load-theme~ in this contex
 ** Font
 Absolutely always [[https://sourcefoundry.org/hack/][Hack]]. It needs to be installed in the machine.
 #+begin_src emacs-lisp
-(custom-set-faces
- '(default ((t (:height 160 :family "Hack")))))
+(set-frame-font "Hack 14" nil t)
 #+end_src
 ** Rainbow delimiters
 #+begin_src emacs-lisp
