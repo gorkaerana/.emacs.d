@@ -1,3 +1,4 @@
+
 #+TITLE: Literate emacs init
 #+AUTHOR: Gorka Eraña
 #+EMAIL: eranagorka@gmail.com
@@ -389,9 +390,12 @@ Terminal emulation using ~emacs-libvterm~.
 #+end_src
 ** [[https://magit.vc/][Magit]]
 #+begin_src emacs-lisp
-;; TODO: figure out on Windows
-(if (not (eq system-type 'windows-nt))
-  (use-package magit :ensure t))
+  ;; TODO: figure out on Windows
+  (if (not (eq system-type 'windows-nt))
+      (use-package magit
+        :ensure t
+        :config
+        (setq package-install-upgrade-built-in t)))
 #+end_src
 ** [[https://www.emacswiki.org/emacs/ParenSetMode][Paren mode]]
 Highlight content inside parentheses, brackets and square brackets.
