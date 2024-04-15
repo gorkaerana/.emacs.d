@@ -1,4 +1,3 @@
-
 #+TITLE: Literate emacs init
 #+AUTHOR: Gorka Eraña
 #+EMAIL: eranagorka@gmail.com
@@ -18,9 +17,10 @@ Create ~init.el~ by tangling the contents of the code blocks: "C-c C-v t" (~org-
 - [[#table-of-contents][Table of contents]]
 - [[#preface][Preface]]
   - [[#package-infrastructure-initialization][Package infrastructure initialization]]
-  - [[#set-up-use-package][Set-up use-package]]
+  - [[#use-package][use-package]]
+  - [[#straightel][straight.el]]
 - [[#aesthetics][Aesthetics]]
-  - [[#theme][Theme]]
+  - [[#nano-theme][nano-theme]]
   - [[#font][Font]]
   - [[#rainbow-delimiters][Rainbow delimiters]]
   - [[#ruler-at-80-characters][Ruler at 80 characters]]
@@ -42,6 +42,7 @@ Create ~init.el~ by tangling the contents of the code blocks: "C-c C-v t" (~org-
   - [[#clojure-mode][Clojure mode]]
   - [[#julia-mode][Julia mode]]
   - [[#typescript-mode][Typescript mode]]
+  - [[#rust-mode][Rust mode]]
   - [[#emacs-neotree][emacs-neotree]]
   - [[#emacs-libvterm][emacs-libvterm]]
   - [[#magit][Magit]]
