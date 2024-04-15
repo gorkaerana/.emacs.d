@@ -70,7 +70,7 @@ Add several archives to list of available repositories.
         ("melpa" . "https://melpa.org/packages/")
         ("gnu" . "https://elpa.gnu.org/packages/")))
 #+end_src
-** Set-up ~use-package~
+** [[https://github.com/jwiegley/use-package][~use-package~]]
 #+begin_src emacs-lisp
   (unless (package-installed-p 'use-package)
     (package-refresh-contents)
@@ -78,19 +78,38 @@ Add several archives to list of available repositories.
   (require 'use-package)
   (eval-when-compile (require 'use-package))
 #+end_src
-* Aesthetics
-** Theme
-I'm still to figure out when to use ~use-package~ or ~load-theme~ in this context.
+** [[https://github.com/radian-software/straight.el][~straight.el~]]
+Code snippet from [[https://github.com/radian-software/straight.el?tab=readme-ov-file#getting-started][project readme]].
 #+begin_src emacs-lisp
-(use-package material-theme
-  :ensure t
-  :config (load-theme 'material t))
+  (defvar bootstrap-version)
+  (let ((bootstrap-file
+         (expand-file-name
+          "straight/repos/straight.el/bootstrap.el"
+          (or (bound-and-true-p straight-base-dir)
+              user-emacs-directory)))
+        (bootstrap-version 7))
+    (unless (file-exists-p bootstrap-file)
+      (with-current-buffer
+          (url-retrieve-synchronously
+           "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
+           'silent 'inhibit-cookies)
+        (goto-char (point-max))
+        (eval-print-last-sexp)))
+    (load bootstrap-file nil 'nomessage))
+#+end_src
+* Aesthetics
+** [[https://github.com/rougier/nano-theme][~nano-theme~]]
+#+begin_src emacs-lisp
+  (straight-use-package '(nano-theme :type git :host github
+                                     :repo "rougier/nano-theme"))
+  (load-theme 'nano-dark t)
 #+end_src
 ** Font
 Absolutely always [[https://sourcefoundry.org/hack/][Hack]]. It needs to be installed in the machine.
 #+begin_src emacs-lisp
-(set-frame-font "Hack 14" nil t)
-#+end_src
+  (custom-set-faces
+   '(default ((t (:height 160 :family "Hack")))))
+ #+end_src
 ** Rainbow delimiters
 #+begin_src emacs-lisp
 (use-package rainbow-delimiters
@@ -175,21 +194,16 @@ Hide splash screen.
   (setq inhibit-splash-screen t)
 #+end_src
 
-Enable line numbers (for every major mode except those in ~display-line-numbers-exempt-modes~).
+Enable line numbers (for every file extension but ~.org~), format them, and add a solid vertical bar.
 #+begin_src emacs-lisp
-  (global-display-line-numbers-mode t)
-  (defcustom display-line-numbers-exempt-modes
-    '(vterm-mode eshell-mode shell-mode term-mode ansi-term-mode org-mode)
-    "Major modes on which to disable line numbers."
-    :group 'display-line-numbers
-    :type 'list
-    :version "green")
-  (defun display-line-numbers--turn-on ()
-    "Turn on line numbers except for certain major modes.
-  Exempt major modes are defined in `display-line-numbers-exempt-modes'."
-    (unless (or (minibufferp)
-                (member major-mode display-line-numbers-exempt-modes))
-      (display-line-numbers-mode)))
+  ;; (global-linum-mode t)
+  (setq linum-format "%4d\u2502")
+  (define-globalized-minor-mode my-global-linum-mode linum-mode
+    (lambda ()
+      (unless (or (minibufferp)
+                  (derived-mode-p 'org-mode))
+        (linum-mode 1))))
+  (my-global-linum-mode t)
 #+end_src
 * Org Mode
 ** Setup
@@ -352,6 +366,10 @@ Flycheck is not exclusive to Python, but it is set up only for it since I mainly
   (define-derived-mode typescriptreact-mode typescript-mode "TypeScript TSX")
   (add-to-list 'auto-mode-alist '("\\.tsx?\\'" . typescriptreact-mode))
   )
+#+end_src
+** [[https://github.com/rust-lang/rust-mode][Rust mode]]
+#+begin_src emacs-lisp
+(use-package rust-mode :ensure t)
 #+end_src
 ** [[https://github.com/jaypei/emacs-neotree][emacs-neotree]]
 #+begin_src emacs-lisp
