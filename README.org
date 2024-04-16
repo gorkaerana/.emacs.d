@@ -18,14 +18,12 @@ Create ~init.el~ by tangling the contents of the code blocks: "C-c C-v t" (~org-
 - [[#table-of-contents][Table of contents]]
 - [[#preface][Preface]]
   - [[#package-infrastructure-initialization][Package infrastructure initialization]]
-  - [[#use-package][use-package]]
-  - [[#straightel][straight.el]]
+  - [[#use-package][~use-package~]]
+  - [[#straightel][~straight.el~]]
 - [[#aesthetics][Aesthetics]]
-  - [[#nano-theme][nano-theme]]
+  - [[#nano-theme][~nano-theme~]]
   - [[#font][Font]]
-  - [[#rainbow-delimiters][Rainbow delimiters]]
   - [[#ruler-at-80-characters][Ruler at 80 characters]]
-  - [[#mode-line][Mode line]]
   - [[#miscellaneous][Miscellaneous]]
 - [[#org-mode][Org Mode]]
   - [[#setup][Setup]]
@@ -112,12 +110,6 @@ Absolutely always [[https://sourcefoundry.org/hack/][Hack]]. It needs to be inst
   (custom-set-faces
    '(default ((t (:height 160 :family "Hack")))))
  #+end_src
-** Rainbow delimiters
-#+begin_src emacs-lisp
-(use-package rainbow-delimiters
-  :ensure t
-  :init (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
-#+end_src
 ** Ruler at 80 characters
 ~display-fill-column-indicator-mode~ was introduced with Emacs 27, so the version ought to be checked before adding the hook.
 #+begin_src emacs-lisp
@@ -126,54 +118,6 @@ Absolutely always [[https://sourcefoundry.org/hack/][Hack]]. It needs to be inst
         (add-hook 'prog-mode-hook #'display-fill-column-indicator-mode)
         (setq-default display-fill-column-indicator-column 80))
     )
-#+end_src
-** [[http://www.gnu.org/software/emacs/manual/html_node/emacs/Mode-Line.html][Mode line]]
-The following code chunk follows an incredibly helpful [[https://emacs-fu.blogspot.com/2011/08/customizing-mode-line.html][blog post]] from Emacs-fu.
-#+begin_src emacs-lisp
-(setq-default mode-line-format
-	      (list
-	       ;; The buffer name, equals file name
-	       '(:eval
-		 (propertize
-		  " %b"
-		  'face
-		  'font-lock-keyword-face
-		  'help-echo
-		  (buffer-file-name)))
-
-	       " — "
-
-	       ;; Line and column
-	       "("
-	       (propertize "%02l" 'face 'font-lock-face-type)
-	       ","
-	       (propertize "%02c" 'face 'font-lock-face-type)
-	       ") "
-
-	       ;; Relative position, size of file
-	       (propertize "%p" 'face 'font-lock-constant-face)
-
-	       ;; Fill with dashes
-	       " — "
-
-
-	       ;; Major mode of buffer
-	       "["
-	       '(:eval
-		 (propertize
-		  "%m"
-		  'face
-		  'font-lock-string-face
-		  'help-echo
-		  buffer-file-coding-system))
-	       "] "
-
-	       ;; Minor modes
-	       "["
-	       minor-mode-alist
-	       "]"
-
-	       ))
 #+end_src
 ** Miscellaneous
 Disable menu bar.
