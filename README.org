@@ -140,85 +140,80 @@ Hide splash screen.
   (setq inhibit-splash-screen t)
 #+end_src
 
-Enable line numbers (for every file extension but ~.org~), format them, and add a solid vertical bar.
+Enable line numbers only in programming mode.
 #+begin_src emacs-lisp
-  ;; (global-linum-mode t)
-  (setq linum-format "%4d\u2502")
-  (define-globalized-minor-mode my-global-linum-mode linum-mode
-    (lambda ()
-      (unless (or (minibufferp)
-                  (derived-mode-p 'org-mode))
-        (linum-mode 1))))
-  (my-global-linum-mode t)
+  (defun my-display-numbers-hook ()
+    (display-line-numbers-mode 1))
+  (add-hook 'prog-mode-hook 'my-display-numbers-hook)
 #+end_src
 * Org Mode
 ** Setup
 #+begin_src emacs-lisp
-(require 'find-lisp)
+  (require 'find-lisp)
 
-(defun all (seq) (cl-reduce (lambda (a b) (and a b)) seq))
+  (defun all (seq) (cl-reduce (lambda (a b) (and a b)) seq))
 
-(defun any (seq) (cl-reduce (lambda (a b) (or a b)) seq))
+  (defun any (seq) (cl-reduce (lambda (a b) (or a b)) seq))
 
-(defun is-work-org-file (fname parentdir)
-  "Heuristic to determine whether a filepath (separated into 'parentdir' and 'fname') is a '.org' file under directory tree 'work'"
-  (and
-   (string-match "\\.org$" fname)
-   (string-match "work" parentdir)))
+  (defun is-work-org-file (fname parentdir)
+    "Heuristic to determine whether a filepath (separated into 'parentdir' and 'fname') is a '.org' file under directory tree 'work'"
+    (and
+     (string-match "\\.org$" fname)
+     (string-match "work" parentdir)))
 
-(defun name-and-parent-belong-to (fname parentdir path)
-  "Checks whether:
-1. Any of the individual parts of 'path' equal 'fname'.
-2. Or, 'parentdir' starts with 'path'.
-"
-  (or
-   (any
-    (mapcar
-     (apply-partially 'string-equal fname)
-     (cdr (split-string path "/"))))
-   (and
-    (string-match (string-join (vector "^" path)) parentdir))))
+  (defun name-and-parent-belong-to (fname parentdir path)
+    "Checks whether:
+  1. Any of the individual parts of 'path' equal 'fname'.
+  2. Or, 'parentdir' starts with 'path'.
+  "
+    (or
+     (any
+      (mapcar
+       (apply-partially 'string-equal fname)
+       (cdr (split-string path "/"))))
+     (and
+      (string-match (string-join (vector "^" path)) parentdir))))
 
-(defun is-dropbox-emacs-dir (fname parentdir)
-  "Heuristic determining whether a filepath (separated into 'parentdir' and 'fname') is under the 'Dropbox/emacs' directory"
-  (and
-   ;; Avoid infinite recursion
-   (and
-    (not (string-equal "." fname))
-    (not (string-equal ".." fname)))
-   (any
-    (mapcar
-     (apply-partially 'name-and-parent-belong-to fname parentdir)
-     ;; Work and home
-     ["c:/Users/GorkaEraña/Dropbox/emacs" "/home/gorka/Dropbox/emacs"]))))
+  (defun is-dropbox-emacs-dir (fname parentdir)
+    "Heuristic determining whether a filepath (separated into 'parentdir' and 'fname') is under the 'Dropbox/emacs' directory"
+    (and
+     ;; Avoid infinite recursion
+     (and
+      (not (string-equal "." fname))
+      (not (string-equal ".." fname)))
+     (any
+      (mapcar
+       (apply-partially 'name-and-parent-belong-to fname parentdir)
+       ;; Work and home
+       ["c:/Users/GorkaEraña/Dropbox/emacs" "/home/gorka/Dropbox/emacs"]))))
 
-(use-package org
-  :ensure t
-  :mode ("\\.org$" . org-mode)
-  :config
-  (setq org-startup-truncated t)
-  ;; Custom todo keyword sequence and colours
-  (setq org-todo-keywords
-        '((sequence "TODO" "IN-PROGRESS" "WAITING" "CANCELLED" "DONE")))
-  (setq org-todo-keyword-faces
-        '(("TODO" . "white") ("IN-PROGRESS" . "orange") ("WAITING" . "red")
-          ("CANCELLED" . "black") ("DONE" . "green")))
-  ;; Linking shortcuts
-  (global-set-key (kbd "C-c l") 'org-store-link)
-  (global-set-key (kbd "C-c C-l") 'org-insert-link)
-  (global-set-key (kbd "C-c a") 'org-agenda)
-  ;; Files for agenda mode
-  (setq org-agenda-files (find-lisp-find-files-internal
-			  (if (eq system-type 'windows-nt) "c:/" "/")
-			  'is-work-org-file
-			  'is-dropbox-emacs-dir))
-  (setq org-agenda-skip-function-global 
-        '(org-agenda-skip-entry-if 'todo '("DONE" "CANCELLED")))
-  ;; Create a CLOSED timestamp when marking an entry DONE. See: https://emacs.stackexchange.com/questions/47951/marking-a-todo-item-done-does-not-create-a-closing-timestamp-in-org-mode
-  (setq org-log-done 'time)
-  ;; Agenda in full window  
-  (setq org-agenda-window-setup 'only-windows)
-  )
+  (use-package org
+    :ensure t
+    :mode ("\\.org$" . org-mode)
+    :config
+    (setq org-startup-truncated t)
+    ;; Custom todo keyword sequence and colours
+    (setq org-todo-keywords
+          '((sequence "TODO" "IN-PROGRESS" "WAITING" "CANCELLED" "DONE")))
+    (setq org-todo-keyword-faces
+          '(("TODO" . "white") ("IN-PROGRESS" . "orange") ("WAITING" . "red")
+            ("CANCELLED" . "black") ("DONE" . "green")))
+    ;; Linking shortcuts
+    (global-set-key (kbd "C-c l") 'org-store-link)
+    (global-set-key (kbd "C-c C-l") 'org-insert-link)
+    (global-set-key (kbd "C-c a") 'org-agenda)
+    ;; Files for agenda mode
+    (setq org-agenda-files (find-lisp-find-files-internal
+                            (if (eq system-type 'windows-nt) "c:/" "/")
+                            'is-work-org-file
+                            'is-dropbox-emacs-dir))
+    (setq org-agenda-skip-function-global 
+          '(org-agenda-skip-entry-if 'todo '("DONE" "CANCELLED")))
+    ;; Create a CLOSED timestamp when marking an entry DONE. See: https://emacs.stackexchange.com/questions/47951/marking-a-todo-item-done-does-not-create-a-closing-timestamp-in-org-mode
+    (setq org-log-done 'time)
+    ;; Agenda in full window  
+    (setq org-agenda-window-setup 'only-windows)
+    )
 #+end_src
 ** Pretty bullets
 [[https://github.com/sabof/org-bullets][org-bullets]] is a package that allows to substitute the asterisks in org-mode for UTF-8 characters. The availability of the bullets depends on how well UTF-8 is supported on the given machine that Emacs happens to be installed in, so ~org-bullets-bullet-list~ might vary from machine to machine. A searchable (and user-friendly) webpage that would make finding bullets more easy is available [[https://unicode-table.com/en/][here]].
