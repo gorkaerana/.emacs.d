@@ -24,6 +24,7 @@ Create ~init.el~ by tangling the contents of the code blocks: "C-c C-v t" (~org-
   - [[#nano-theme][~nano-theme~]]
   - [[#font][Font]]
   - [[#ruler-at-80-characters][Ruler at 80 characters]]
+  - [[#rainbow-delimiters][~rainbow-delimiters~]]
   - [[#miscellaneous][Miscellaneous]]
 - [[#org-mode][Org Mode]]
   - [[#setup][Setup]]
@@ -118,6 +119,12 @@ Absolutely always [[https://sourcefoundry.org/hack/][Hack]]. It needs to be inst
         (add-hook 'prog-mode-hook #'display-fill-column-indicator-mode)
         (setq-default display-fill-column-indicator-column 80))
     )
+#+end_src
+** [[https://github.com/Fanael/rainbow-delimiters][~rainbow-delimiters~]]
+#+begin_src emacs-lisp
+  (use-package rainbow-delimiters
+    :ensure t
+    :init (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
 #+end_src
 ** Miscellaneous
 Disable menu bar.
