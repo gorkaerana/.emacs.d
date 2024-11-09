@@ -338,10 +338,16 @@ Terminal emulation using ~emacs-libvterm~.
 #+begin_src emacs-lisp
   ;; TODO: figure out on Windows
   (if (not (eq system-type 'windows-nt))
-      (use-package magit
+      (use-package magit-delta
         :ensure t
-        :config
-        (setq package-install-upgrade-built-in t)))
+        :hook (magit-mode . magit-delta-mode))
+    (use-package magit
+      :ensure t
+      :config
+      (setq package-install-upgrade-built-in t)
+      (add-hook 'magit-mode-hook (lambda () (magit-delta-mode +1)))
+      )
+    )
 #+end_src
 ** [[https://www.emacswiki.org/emacs/ParenSetMode][Paren mode]]
 Highlight content inside parentheses, brackets and square brackets.
@@ -352,6 +358,10 @@ Highlight content inside parentheses, brackets and square brackets.
   (setq show-paren-style 'parenthesis)
   (setq show-paren-when-point-in-periphery t)
   (setq show-paren-when-point-inside-paren t))
+#+end_src
+** Lark mode
+#+begin_src emacs-lisp
+(use-package lark-mode)
 #+end_src
 * Miscellaneous
 ** Normal copy-pasting in Windows
