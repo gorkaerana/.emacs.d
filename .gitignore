@@ -6,11 +6,13 @@ init.el
 # Directories
 **/*~
 auto-save-list/
+eln-cache/
 elpa/
 elpy/
+eshell/
 list/
 snippets/
+straight/
 themes/
 transient/
-eshell/
-eln-cache/
+
