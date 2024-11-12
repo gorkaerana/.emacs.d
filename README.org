@@ -335,6 +335,7 @@ Terminal emulation using ~emacs-libvterm~.
     (use-package vterm :ensure t))
 #+end_src
 ** [[https://magit.vc/][Magit]]
+~magit-delta-mode~ requires [[https://github.com/dandavison/delta?tab=readme-ov-file][~delta~]] to be installed, refer to the [[https://dandavison.github.io/delta/installation.html][relevant documentation page]].
 #+begin_src emacs-lisp
   ;; TODO: figure out on Windows
   (if (not (eq system-type 'windows-nt))
@@ -361,7 +362,7 @@ Highlight content inside parentheses, brackets and square brackets.
 #+end_src
 ** Lark mode
 #+begin_src emacs-lisp
-(use-package lark-mode)
+(use-package lark-mode :ensure t)
 #+end_src
 * Miscellaneous
 ** Normal copy-pasting in Windows
