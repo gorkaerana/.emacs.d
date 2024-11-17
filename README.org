@@ -12,19 +12,19 @@ Create ~init.el~ by tangling the contents of the code blocks: "C-c C-v t" (~org-
 
 * Table of contents
 :PROPERTIES:
-:TOC: :include all :depth 2
+:TOC:      :depth 2  :include all
 :END:
 :CONTENTS:
 - [[#table-of-contents][Table of contents]]
 - [[#preface][Preface]]
   - [[#package-infrastructure-initialization][Package infrastructure initialization]]
-  - [[#use-package][~use-package~]]
-  - [[#straightel][~straight.el~]]
+  - [[#use-package][use-package]]
+  - [[#straightel][straight.el]]
 - [[#aesthetics][Aesthetics]]
-  - [[#nano-theme][~nano-theme~]]
+  - [[#catppucin-theme][catppucin-theme]]
   - [[#font][Font]]
   - [[#ruler-at-80-characters][Ruler at 80 characters]]
-  - [[#rainbow-delimiters][~rainbow-delimiters~]]
+  - [[#rainbow-delimiters][rainbow-delimiters]]
   - [[#miscellaneous][Miscellaneous]]
 - [[#org-mode][Org Mode]]
   - [[#setup][Setup]]
@@ -47,6 +47,7 @@ Create ~init.el~ by tangling the contents of the code blocks: "C-c C-v t" (~org-
   - [[#emacs-libvterm][emacs-libvterm]]
   - [[#magit][Magit]]
   - [[#paren-mode][Paren mode]]
+  - [[#lark-mode][Lark mode]]
 - [[#miscellaneous][Miscellaneous]]
   - [[#normal-copy-pasting-in-windows][Normal copy-pasting in Windows]]
   - [[#org-make-toc][org-make-toc]]
@@ -99,11 +100,10 @@ Code snippet from [[https://github.com/radian-software/straight.el?tab=readme-ov
     (load bootstrap-file nil 'nomessage))
 #+end_src
 * Aesthetics
-** [[https://github.com/rougier/nano-theme][~nano-theme~]]
+** [[https://github.com/catppuccin/emacs?tab=readme-ov-file][~catppucin-theme~]]
 #+begin_src emacs-lisp
-  (straight-use-package '(nano-theme :type git :host github
-                                     :repo "rougier/nano-theme"))
-  (load-theme 'nano-dark t)
+  (straight-use-package 'catppuccin-theme)
+  (load-theme 'catppuccin :no-confirm)
 #+end_src
 ** Font
 Absolutely always [[https://sourcefoundry.org/hack/][Hack]]. It needs to be installed in the machine.
