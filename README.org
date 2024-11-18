@@ -21,7 +21,7 @@ Create ~init.el~ by tangling the contents of the code blocks: "C-c C-v t" (~org-
   - [[#use-package][use-package]]
   - [[#straightel][straight.el]]
 - [[#aesthetics][Aesthetics]]
-  - [[#catppucin-theme][catppucin-theme]]
+  - [[#catppuccin-theme][catppuccin-theme]]
   - [[#font][Font]]
   - [[#ruler-at-80-characters][Ruler at 80 characters]]
   - [[#rainbow-delimiters][rainbow-delimiters]]
@@ -100,7 +100,7 @@ Code snippet from [[https://github.com/radian-software/straight.el?tab=readme-ov
     (load bootstrap-file nil 'nomessage))
 #+end_src
 * Aesthetics
-** [[https://github.com/catppuccin/emacs?tab=readme-ov-file][~catppucin-theme~]]
+** [[https://github.com/catppuccin/emacs?tab=readme-ov-file][~catppuccin-theme~]]
 #+begin_src emacs-lisp
   (straight-use-package 'catppuccin-theme)
   (load-theme 'catppuccin :no-confirm)
