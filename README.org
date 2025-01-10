@@ -1,4 +1,3 @@
-
 #+TITLE: Literate emacs init
 #+AUTHOR: Gorka Eraña
 #+EMAIL: eranagorka@gmail.com
@@ -29,50 +28,42 @@ Create ~init.el~ by tangling the contents of the code blocks: "C-c C-v t" (~org-
 - [[#org-mode][Org Mode]]
   - [[#setup][Setup]]
   - [[#pretty-bullets][Pretty bullets]]
-- [[#python-ide-packages][Python IDE packages]]
-  - [[#elpy][Elpy]]
-  - [[#py-autopep8][py-autopep8]]
-  - [[#blacken][Blacken]]
-  - [[#flycheck][Flycheck]]
-- [[#lsp][LSP]]
-  - [[#lsp-mode][LSP-mode]]
 - [[#various-ide-packages][Various IDE packages]]
   - [[#markdown-mode][markdown-mode]]
   - [[#yaml-mode][yaml-mode]]
-  - [[#clojure-mode][Clojure mode]]
-  - [[#julia-mode][Julia mode]]
-  - [[#typescript-mode][Typescript mode]]
-  - [[#rust-mode][Rust mode]]
+  - [[#clojure-mode][clojure-mode]]
+  - [[#julia-mode][julia-mode]]
+  - [[#typescript-mode][typescript-mode]]
+  - [[#rust-mode][rust-mode]]
+  - [[#lark-mode][lark-mode]]
   - [[#emacs-neotree][emacs-neotree]]
   - [[#emacs-libvterm][emacs-libvterm]]
   - [[#magit][Magit]]
   - [[#paren-mode][Paren mode]]
-  - [[#lark-mode][Lark mode]]
 - [[#miscellaneous][Miscellaneous]]
   - [[#normal-copy-pasting-in-windows][Normal copy-pasting in Windows]]
   - [[#org-make-toc][org-make-toc]]
 :END:
 * Preface
 ** Package infrastructure initialization
-Enables basic package supporting.
+Enable and initialize basic ~package~ infrastructure.
 #+begin_src emacs-lisp
-(require 'package)
-#+end_src
-
-Initialize the package infrastructure.
-#+begin_src emacs-lisp
-(package-initialize)
+  (require 'package)
+  (package-initialize)
 #+end_src
 
 Add several archives to list of available repositories.
 #+begin_src emacs-lisp
-(setq package-archives
-      '(("org" . "https://orgmode.org/elpa/")
-        ("stable-melpa" . "https://stable.melpa.org/packages/")
-        ("melpa" . "https://melpa.org/packages/")
-        ("gnu" . "https://elpa.gnu.org/packages/")))
+  (setq package-archives
+        '(
+          ("org" . "https://orgmode.org/elpa/")
+          ("stable-melpa" . "https://stable.melpa.org/packages/")
+          ("melpa" . "https://melpa.org/packages/")
+          ("gnu" . "https://elpa.gnu.org/packages/")
+          ))
 #+end_src
 ** [[https://github.com/jwiegley/use-package][~use-package~]]
+Quality-of-life improvement.
 #+begin_src emacs-lisp
   (unless (package-installed-p 'use-package)
     (package-refresh-contents)
@@ -81,7 +72,7 @@ Add several archives to list of available repositories.
   (eval-when-compile (require 'use-package))
 #+end_src
 ** [[https://github.com/radian-software/straight.el][~straight.el~]]
-Code snippet from [[https://github.com/radian-software/straight.el?tab=readme-ov-file#getting-started][project readme]].
+Code snippet from [[https://github.com/radian-software/straight.el?tab=readme-ov-file#getting-started][project readme]]. This is only used to fetch the catpuccin theme.
 #+begin_src emacs-lisp
   (defvar bootstrap-version)
   (let ((bootstrap-file
@@ -236,64 +227,6 @@ Reload files when they are modified externally.
   (setq org-bullets-bullet-list '("•"))
   (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
 #+end_src
-* Python IDE packages
-** [[https://github.com/jorgenschaefer/elpy][Elpy]]
-Emacs Python IDE, which I'm pretty sure I don't use it to its full extent.
-#+begin_src emacs-lisp
-(use-package elpy
-  :ensure t
-  :init (elpy-enable))
-#+end_src
-** [[https://github.com/paetzke/py-autopep8.el][py-autopep8]]
-Format code upon save to comply with [[https://www.python.org/dev/peps/pep-0008/][PEP 8]].
-#+begin_src emacs-lisp
-(use-package py-autopep8
-  :ensure t
-  :config (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save))
-#+end_src
-** [[https://github.com/pythonic-emacs/blacken][Blacken]]
-Code formatting by [[https://github.com/psf/black][black]].
-#+begin_src emacs-lisp
-(use-package blacken
-  :ensure t
-  :config 'blacken-mode)
-#+end_src
-** [[https://www.flycheck.org/en/latest/][Flycheck]]
-Flycheck is not exclusive to Python, but it is set up only for it since I mainly develop in Python.
-#+begin_src emacs-lisp
-(use-package flycheck
-  :ensure t
-  :config
-  (when (require 'flycheck nil t)
-    (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
-    (add-hook 'elpy-mode-hook 'flycheck-mode)))
-#+end_src
-* LSP
-** [[https://emacs-lsp.github.io/lsp-mode/][LSP-mode]]
-#+begin_src emacs-lisp
-(use-package lsp-mode
-  :init
-  ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
-  (setq lsp-keymap-prefix "C-c l")
-  :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
-         (python-mode . lsp)
-         (clojure-mode . lsp)
-         ;; if you want which-key integration
-         (lsp-mode . lsp-enable-which-key-integration))
-  :commands lsp)
-
-;; optionally
-;; (use-package lsp-ui :commands lsp-ui-mode)
-
-;; optionally if you want to use debugger
-;; (use-package dap-mode)
-;; (use-package dap-LANGUAGE) to load the dap adapter for your language
-
-;; optional if you want which-key integration
-;; (use-package which-key
-;;     :config
-;;     (which-key-mode))
-#+end_src
 * Various IDE packages
 ** [[https://www.emacswiki.org/emacs/MarkdownMode][markdown-mode]]
 #+begin_src emacs-lisp
@@ -303,15 +236,15 @@ Flycheck is not exclusive to Python, but it is set up only for it since I mainly
 #+begin_src emacs-lisp
 (use-package yaml-mode :ensure t)
 #+end_src
-** [[https://github.com/clojure-emacs/clojure-mode/][Clojure mode]]
+** [[https://github.com/clojure-emacs/clojure-mode/][clojure-mode]]
 #+begin_src emacs-lisp
 (use-package clojure-mode :ensure t)
 #+end_src
-** [[https://github.com/JuliaEditorSupport/julia-emacs][Julia mode]]
+** [[https://github.com/JuliaEditorSupport/julia-emacs][julia-mode]]
 #+begin_src emacs-lisp
 (use-package julia-mode :ensure t)
 #+end_src
-** [[https://github.com/emacs-typescript/typescript.el][Typescript mode]]
+** [[https://github.com/emacs-typescript/typescript.el][typescript-mode]]
 #+begin_src emacs-lisp
 (use-package typescript-mode
   :ensure t
@@ -320,9 +253,13 @@ Flycheck is not exclusive to Python, but it is set up only for it since I mainly
   (add-to-list 'auto-mode-alist '("\\.tsx?\\'" . typescriptreact-mode))
   )
 #+end_src
-** [[https://github.com/rust-lang/rust-mode][Rust mode]]
+** [[https://github.com/rust-lang/rust-mode][rust-mode]]
 #+begin_src emacs-lisp
 (use-package rust-mode :ensure t)
+#+end_src
+** [[https://github.com/taquangtrung/lark-mode][lark-mode]]
+#+begin_src emacs-lisp
+(use-package lark-mode :ensure t)
 #+end_src
 ** [[https://github.com/jaypei/emacs-neotree][emacs-neotree]]
 #+begin_src emacs-lisp
@@ -364,10 +301,6 @@ Highlight content inside parentheses, brackets and square brackets.
   (setq show-paren-style 'parenthesis)
   (setq show-paren-when-point-in-periphery t)
   (setq show-paren-when-point-inside-paren t))
-#+end_src
-** Lark mode
-#+begin_src emacs-lisp
-(use-package lark-mode :ensure t)
 #+end_src
 * Miscellaneous
 ** Normal copy-pasting in Windows
