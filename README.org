@@ -71,30 +71,11 @@ Quality-of-life improvement.
   (require 'use-package)
   (eval-when-compile (require 'use-package))
 #+end_src
-** [[https://github.com/radian-software/straight.el][~straight.el~]]
-Code snippet from [[https://github.com/radian-software/straight.el?tab=readme-ov-file#getting-started][project readme]]. This is only used to fetch the catpuccin theme.
-#+begin_src emacs-lisp
-  (defvar bootstrap-version)
-  (let ((bootstrap-file
-         (expand-file-name
-          "straight/repos/straight.el/bootstrap.el"
-          (or (bound-and-true-p straight-base-dir)
-              user-emacs-directory)))
-        (bootstrap-version 7))
-    (unless (file-exists-p bootstrap-file)
-      (with-current-buffer
-          (url-retrieve-synchronously
-           "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
-           'silent 'inhibit-cookies)
-        (goto-char (point-max))
-        (eval-print-last-sexp)))
-    (load bootstrap-file nil 'nomessage))
-#+end_src
 * Aesthetics
-** [[https://github.com/catppuccin/emacs?tab=readme-ov-file][~catppuccin-theme~]]
+** [[https://draculatheme.com/emacs][~dracula-theme~]]
 #+begin_src emacs-lisp
-  (straight-use-package 'catppuccin-theme)
-  (load-theme 'catppuccin :no-confirm)
+  (use-package dracula-theme :ensure t)
+  (load-theme 'dracula t)
 #+end_src
 ** Font
 Absolutely always [[https://sourcefoundry.org/hack/][Hack]]. It needs to be installed in the machine.
@@ -270,7 +251,7 @@ Reload files when they are modified externally.
   (setq-default neo-show-hidden-files t))
 #+end_src
 ** [[https://github.com/akermu/emacs-libvterm][emacs-libvterm]]
-Terminal emulation using ~emacs-libvterm~.
+Terminal emulation using ~emacs-libvterm~. Might need to install ~libvterm~ via ~sudo apt install libvterm-dev~.
 #+begin_src emacs-lisp
 ;; TODO: figure out on Windows
 (if (not (eq system-type 'windows-nt))
