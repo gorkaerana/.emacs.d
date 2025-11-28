@@ -2,6 +2,7 @@
 *~
 *.data
 init.el
+projectile-bookmarks.eld
 
 # Directories
 **/*~
@@ -15,4 +16,3 @@ snippets/
 straight/
 themes/
 transient/
-

@@ -18,16 +18,16 @@ Create ~init.el~ by tangling the contents of the code blocks: "C-c C-v t" (~org-
 - [[#preface][Preface]]
   - [[#package-infrastructure-initialization][Package infrastructure initialization]]
   - [[#use-package][use-package]]
-  - [[#straightel][straight.el]]
 - [[#aesthetics][Aesthetics]]
-  - [[#catppuccin-theme][catppuccin-theme]]
+  - [[#dracula-theme][dracula-theme]]
   - [[#font][Font]]
   - [[#ruler-at-80-characters][Ruler at 80 characters]]
   - [[#rainbow-delimiters][rainbow-delimiters]]
   - [[#miscellaneous][Miscellaneous]]
 - [[#org-mode][Org Mode]]
   - [[#setup][Setup]]
-  - [[#pretty-bullets][Pretty bullets]]
+  - [[#org-modern][org-modern]]
+  - [[#org-appear][org-appear]]
 - [[#various-ide-packages][Various IDE packages]]
   - [[#markdown-mode][markdown-mode]]
   - [[#yaml-mode][yaml-mode]]
@@ -42,6 +42,8 @@ Create ~init.el~ by tangling the contents of the code blocks: "C-c C-v t" (~org-
   - [[#paren-mode][Paren mode]]
 - [[#miscellaneous][Miscellaneous]]
   - [[#normal-copy-pasting-in-windows][Normal copy-pasting in Windows]]
+  - [[#consult][consult]]
+  - [[#projectile][projectile]]
   - [[#org-make-toc][org-make-toc]]
 :END:
 * Preface
@@ -325,6 +327,19 @@ I believe copy-pasting (in the Emacs sense of it) stopped to working with Emacs 
 (set-keyboard-coding-system 'utf-8)
 (prefer-coding-system 'utf-8)
 #+end_src
+** [[https://github.com/minad/consult][consult]]
+#+begin_src emacs-lisp
+(use-package consult :ensure t)
+#+end_src
+** [[https://github.com/bbatsov/projectile][projectile]]
+#+begin_src emacs-lisp
+(use-package projectile
+  :ensure t
+  :config
+  (projectile-mode +1)
+  (setq projectile-project-search-path '("/home/gorka/dev"))
+  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
+#+end_src
 ** [[https://github.com/alphapapa/org-make-toc][org-make-toc]]
 "Usage" section in the README of the link in the header of this subsection describes well how to use this package. Quoting it:
 
@@ -340,3 +355,16 @@ Nevertheless, after running ~org-make-toc-insert~ I had to remove all TOC proper
 #+begin_src emacs-lisp
 (use-package org-make-toc :ensure t)
 #+end_src
+
+
+#+TITLE: Literate emacs init
+#+AUTHOR: Gorka Eraña
+#+EMAIL: eranagorka@gmail.com
+#+DATE: <2021-05-12 Wed>
+#+CREATED: 2021-05-12
+#+STARTUP: hidestars indent overview
+#+PROPERTY: header-args :results silent :tangle "./init.el"
+#+OPTIONS: toc:2
+
+Create ~init.el~ by tangling the contents of the code blocks: "C-c C-v t" (~org-babel-tangle~).
+
