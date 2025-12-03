@@ -61,7 +61,8 @@ Add several archives to list of available repositories.
           ("org" . "https://orgmode.org/elpa/")
           ("stable-melpa" . "https://stable.melpa.org/packages/")
           ("melpa" . "https://melpa.org/packages/")
-          ("gnu" . "https://elpa.gnu.org/packages/")
+          ("gnu-elpa" . "https://elpa.gnu.org/packages/")
+          ("non-gnu-elpa" . "https://elpa.nongnu.org/nongnu/")
           ))
 #+end_src
 ** [[https://github.com/jwiegley/use-package][~use-package~]]
@@ -304,7 +305,6 @@ Terminal emulation using ~emacs-libvterm~. Might need to install ~libvterm~ via 
     )
 #+end_src
 ** [[https://www.emacswiki.org/emacs/ParenSetMode][Paren mode]]
-Highlight content inside parentheses, brackets and square brackets.
 #+begin_src emacs-lisp
 (use-package paren
   :config
@@ -312,6 +312,11 @@ Highlight content inside parentheses, brackets and square brackets.
   (setq show-paren-style 'parenthesis)
   (setq show-paren-when-point-in-periphery t)
   (setq show-paren-when-point-inside-paren t))
+#+end_src
+** [[https://github.com/sheijk/hideshowvis][hideshowvis]]
+"Add little clickable +/- icons in the Emacs fringe for regions which Emacs' hideshow.el can hide."
+#+begin_src emacs-lisp
+(use-package hideshowvis :ensure t :config (add-hook 'python-mode-hook 'hideshowvis-minor-mode))
 #+end_src
 * Miscellaneous
 ** Normal copy-pasting in Windows
