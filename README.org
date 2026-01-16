@@ -7,7 +7,7 @@
 # #+PROPERTY: header-args :results silent :tangle "./init.el"
 # #+OPTIONS: toc:2
 
-I finally got around to using [[https://github.com/syl20bnr/spacemacs][spacemacs]] and now I can replace the previous bespoke ~init.el~ with a simple algorithm.
+I finally got around to using [[https://github.com/syl20bnr/spacemacs][spacemacs]] and now I can replace the previous bespoke =init.el= with a simple algorithm.
 
 * Steps
 ** Clone spacemacs
@@ -16,23 +16,23 @@ I finally got around to using [[https://github.com/syl20bnr/spacemacs][spacemacs
 #+end_src
 ** Choose mode and distribution
 Upon first spacemacs start up choose "emacs mode" and the "standard distribution".
-** Within =\~.spacemacs=
-*** Under ~dotspacemacs-configuration-layers~
-- Uncomment: ~git~, ~lsp~, ~markdown~, ~org~, ~treemacs~.
-- Activate ~vterm~ with the below configuration. (Note: it will have to be compiled the first time it is used.)
+** Within =~.spacemacs=
+*** Under =dotspacemacs-configuration-layers=
+- Uncomment: =git=, =lsp=, =markdown=, =org=, =treemacs=.
+- Activate =vterm= with the below configuration. (Note: it will have to be compiled the first time it is used.)
 #+begin_src emacs-lisp
   (shell :variables
          shell-default-height 30
          shell-default-position 'bottom
          shell-default-shell 'vterm)
 #+end_src
-- Enable ~magit~ and ~magit-delta~ with
+- Enable =magit= and =magit-delta= with
 #+begin_src emacs-lisp
   (git :variables git-enable-magit-delta-plugin t)
 #+end_src
-*** Under ~dotspacemacs/init~
+*** Under =dotspacemacs/init=
 Set relative line numbers with ~dotspacemacs-line-numbers 'relative~
-*** Under ~dotspacemacs/user-init~
+*** Under =dotspacemacs/user-init=
 Add
 #+begin_src emacs-lisp
   (setq
@@ -49,11 +49,11 @@ Add
   ;; Toggle treemacs more easily
   (global-set-key [f8] 'treemacs)
 #+end_src
-*** Under ~dotspacemacs/user-config~
-Add the below, where ~[...]~ is a placeholder for the files and folders you want to be included in Org Agenda
+*** Under =dotspacemacs/user-config=
+Add the below, where =[...]= is a placeholder for the files and folders you want to be included in Org Agenda
 #+begin_src emacs-lisp
   (with-eval-after-load 'org
     (add-to-list 'org-agenda-files "[...]"))
 #+end_src
 * Potential improvements
-Ideally the steps described in the previous section would happen automatically. E.g. via ~org-babel-tangle~ into a bash script or something.
+Ideally the steps described in the previous section would happen automatically. E.g. via =org-babel-tangle= into a bash script or something.
