@@ -1,375 +1,59 @@
-#+TITLE: Literate emacs init
+#+TITLE: Literate Org README
 #+AUTHOR: Gorka Eraña
 #+EMAIL: eranagorka@gmail.com
-#+DATE: <2021-05-12 Wed>
+#+DATE: <2026-01-16 Fri>
 #+CREATED: 2021-05-12
 #+STARTUP: hidestars indent overview
-#+PROPERTY: header-args :results silent :tangle "./init.el"
-#+OPTIONS: toc:2
+# #+PROPERTY: header-args :results silent :tangle "./init.el"
+# #+OPTIONS: toc:2
 
-Create ~init.el~ by tangling the contents of the code blocks: "C-c C-v t" (~org-babel-tangle~).
+I finally got around to using [[https://github.com/syl20bnr/spacemacs][spacemacs]] and now I can replace the previous bespoke ~init.el~ with a simple algorithm.
 
-* Table of contents
-:PROPERTIES:
-:TOC:      :depth 2  :include all
-:END:
-:CONTENTS:
-- [[#table-of-contents][Table of contents]]
-- [[#preface][Preface]]
-  - [[#package-infrastructure-initialization][Package infrastructure initialization]]
-  - [[#use-package][use-package]]
-- [[#aesthetics][Aesthetics]]
-  - [[#dracula-theme][dracula-theme]]
-  - [[#font][Font]]
-  - [[#ruler-at-80-characters][Ruler at 80 characters]]
-  - [[#rainbow-delimiters][rainbow-delimiters]]
-  - [[#miscellaneous][Miscellaneous]]
-- [[#org-mode][Org Mode]]
-  - [[#setup][Setup]]
-  - [[#org-modern][org-modern]]
-  - [[#org-appear][org-appear]]
-- [[#various-ide-packages][Various IDE packages]]
-  - [[#markdown-mode][markdown-mode]]
-  - [[#yaml-mode][yaml-mode]]
-  - [[#clojure-mode][clojure-mode]]
-  - [[#julia-mode][julia-mode]]
-  - [[#typescript-mode][typescript-mode]]
-  - [[#rust-mode][rust-mode]]
-  - [[#lark-mode][lark-mode]]
-  - [[#emacs-neotree][emacs-neotree]]
-  - [[#emacs-libvterm][emacs-libvterm]]
-  - [[#magit][Magit]]
-  - [[#paren-mode][Paren mode]]
-- [[#miscellaneous][Miscellaneous]]
-  - [[#normal-copy-pasting-in-windows][Normal copy-pasting in Windows]]
-  - [[#consult][consult]]
-  - [[#projectile][projectile]]
-  - [[#org-make-toc][org-make-toc]]
-:END:
-* Preface
-** Package infrastructure initialization
-Enable and initialize basic ~package~ infrastructure.
-#+begin_src emacs-lisp
-  (require 'package)
-  (package-initialize)
+* Steps
+** Clone spacemacs
+#+begin_src bash
+  git clone https://github.com/syl20bnr/spacemacs ~/.emacs.d
 #+end_src
-
-Add several archives to list of available repositories.
+** Choose mode and distribution
+Upon first spacemacs start up choose "emacs mode" and the "standard distribution".
+** Within ~~/.spacemacs~
+*** Under ~dotspacemacs-configuration-layers~
+- Uncomment: ~git~, ~lsp~, ~markdown~, ~org~, ~treemacs~.
+- Activate ~vterm~ with the below configuration. (Note: it will have to be compiled the first time it is used.)
 #+begin_src emacs-lisp
-  (setq package-archives
-        '(
-          ("org" . "https://orgmode.org/elpa/")
-          ("stable-melpa" . "https://stable.melpa.org/packages/")
-          ("melpa" . "https://melpa.org/packages/")
-          ("gnu-elpa" . "https://elpa.gnu.org/packages/")
-          ("non-gnu-elpa" . "https://elpa.nongnu.org/nongnu/")
-          ))
+  (shell :variables
+         shell-default-height 30
+         shell-default-position 'bottom
+         shell-default-shell 'vterm)
 #+end_src
-** [[https://github.com/jwiegley/use-package][~use-package~]]
-Quality-of-life improvement.
+- Enable ~magit~ and ~magit-delta~ with
 #+begin_src emacs-lisp
-  (unless (package-installed-p 'use-package)
-    (package-refresh-contents)
-    (package-install 'use-package))
-  (require 'use-package)
-  (eval-when-compile (require 'use-package))
+  (git :variables git-enable-magit-delta-plugin t)
 #+end_src
-* Aesthetics
-** [[https://draculatheme.com/emacs][~dracula-theme~]]
+*** Under ~dotspacemacs/init~
+Set relative line numbers with ~dotspacemacs-line-numbers 'relative~
+*** Under ~dotspacemacs/user-init~
+Add
 #+begin_src emacs-lisp
-  (use-package dracula-theme :ensure t)
-  (load-theme 'dracula t)
-#+end_src
-** Font
-Absolutely always [[https://sourcefoundry.org/hack/][Hack]]. It needs to be installed in the machine.
-#+begin_src emacs-lisp
-  (custom-set-faces
-   '(default ((t (:height 160 :family "Hack")))))
- #+end_src
-** Ruler at 80 characters
-~display-fill-column-indicator-mode~ was introduced with Emacs 27, so the version ought to be checked before adding the hook.
-#+begin_src emacs-lisp
-  (if (version< "27.0" emacs-version)
-      (progn
-        (add-hook 'prog-mode-hook #'display-fill-column-indicator-mode)
-        (setq-default display-fill-column-indicator-column 80))
-    )
-#+end_src
-** [[https://github.com/Fanael/rainbow-delimiters][~rainbow-delimiters~]]
-#+begin_src emacs-lisp
-  (use-package rainbow-delimiters
-    :ensure t
-    :init (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
-#+end_src
-** Miscellaneous
-Disable menu bar.
-#+begin_src emacs-lisp
-  (menu-bar-mode -1)
-#+end_src
-
-Disable tool bar.
-#+begin_src emacs-lisp
-  (tool-bar-mode -1)
-#+end_src
-
-Hide startup message.
-#+begin_src emacs-lisp
-  (setq inhibit-startup-message t)
-#+end_src
-
-Hide splash screen.
-#+begin_src emacs-lisp
-  (setq inhibit-splash-screen t)
-#+end_src
-
-Enable line numbers only in programming mode.
-#+begin_src emacs-lisp
-  (defun my-display-numbers-hook ()
-    (display-line-numbers-mode 1))
-  (add-hook 'prog-mode-hook 'my-display-numbers-hook)
-#+end_src
-
-Reload files when they are modified externally.
-#+begin_src emacs-lisp
-  (global-auto-revert-mode 1)
-#+end_src
-
-Use the mouse even in terminal mode
-#+begin_src emacs-lisp
-  (xterm-mouse-mode 1)
-#+end_src
-
-Vertical border in terminal mode
-#+begin_src emacs-lisp
-  (set-face-foreground 'vertical-border "white")
-#+end_src
-* Org Mode
-** Setup
-#+begin_src emacs-lisp
-  (require 'find-lisp)
-
-  (defun all (seq) (cl-reduce (lambda (a b) (and a b)) seq))
-
-  (defun any (seq) (cl-reduce (lambda (a b) (or a b)) seq))
-
-  (defun is-work-org-file (fname parentdir)
-    "Heuristic to determine whether a filepath (separated into 'parentdir' and 'fname') is a '.org' file under directory tree 'work'"
-    (and
-     (string-match "\\.org$" fname)
-     (string-match "work" parentdir)))
-
-  (defun name-and-parent-belong-to (fname parentdir path)
-    "Checks whether:
-  1. Any of the individual parts of 'path' equal 'fname'.
-  2. Or, 'parentdir' starts with 'path'.
-  "
-    (or
-     (any
-      (mapcar
-       (apply-partially 'string-equal fname)
-       (cdr (split-string path "/"))))
-     (and
-      (string-match (string-join (vector "^" path)) parentdir))))
-
-  (defun is-dropbox-emacs-dir (fname parentdir)
-    "Heuristic determining whether a filepath (separated into 'parentdir' and 'fname') is under the 'Dropbox/emacs' directory"
-    (and
-     ;; Avoid infinite recursion
-     (and
-      (not (string-equal "." fname))
-      (not (string-equal ".." fname)))
-     (any
-      (mapcar
-       (apply-partially 'name-and-parent-belong-to fname parentdir)
-       ;; Work and home
-       ["c:/Users/GorkaEraña/Dropbox/emacs" "/home/gorka/Dropbox/emacs"]))))
-
-  (use-package org
-    :ensure t
-    :mode ("\\.org$" . org-mode)
-    :config
-    (setq org-startup-truncated t)
-    ;; Custom todo keyword sequence and colours
-    (setq org-todo-keywords
-          '((sequence "TODO" "IN-PROGRESS" "WAITING" "CANCELLED" "DONE")))
-    (setq org-todo-keyword-faces
-          '(("TODO" . "white") ("IN-PROGRESS" . "orange") ("WAITING" . "red")
-            ("CANCELLED" . "black") ("DONE" . "green")))
-    ;; Linking shortcuts
-    (global-set-key (kbd "C-c l") 'org-store-link)
-    (global-set-key (kbd "C-c C-l") 'org-insert-link)
-    (global-set-key (kbd "C-c a") 'org-agenda)
-    ;; Files for agenda mode
-    (setq org-agenda-files (find-lisp-find-files-internal
-                            (if (eq system-type 'windows-nt) "c:/" "/")
-                            'is-work-org-file
-                            'is-dropbox-emacs-dir))
-    (setq org-agenda-skip-function-global 
-          '(org-agenda-skip-entry-if 'todo '("DONE" "CANCELLED")))
-    ;; Create a CLOSED timestamp when marking an entry DONE. See: https://emacs.stackexchange.com/questions/47951/marking-a-todo-item-done-does-not-create-a-closing-timestamp-in-org-mode
-    (setq org-log-done 'time)
-    ;; Agenda in full window  
-    (setq org-agenda-window-setup 'only-windows)
-    )
-#+end_src
-** org-modern
-#+begin_src emacs-lisp
-(use-package org-modern
-  :ensure t
-  :config
-  (add-hook 'org-mode-hook #'org-modern-mode)
-  (add-hook 'org-agenda-finalize-hook #'org-modern-agenda)
   (setq
-   ;; Edit settings
-   org-auto-align-tags nil
-   org-tags-column 0
-   org-catch-invisible-edits 'show-and-error
-   org-special-ctrl-a/e t
-   org-insert-heading-respect-content t
-
-   ;; Org styling, hide markup etc.
-   org-hide-emphasis-markers t
-   org-pretty-entities t
-   org-agenda-tags-column 0
-   org-ellipsis "…"))
+   ;; More todo keywords
+   org-todo-keywords '((sequence "TODO" "IN-PROGRESS" "WAITING" "CANCELLED" "DONE"))
+   ;; And colours for them
+   org-todo-keyword-faces '(
+                            ("TODO" . (:foreground "orange" :weight bold))
+                            ("IN-PROGRESS" . (:foreground "yellow" :weight bold))
+                            ("WAITING" . (:foreground "red" :weight bold))
+                            ("CANCELLED" . (:foreground "black" :weight bold))
+                            )
+   )
+  ;; Toggle treemacs more easily
+  (global-set-key [f8] 'treemacs)
 #+end_src
-** org-appear
+*** Under ~dotspacemacs/user-config~
+Add the below, where ~[...]~ is a placeholder for the files and folders you want to be included in Org Agenda
 #+begin_src emacs-lisp
-(use-package org-appear
-  :ensure t
-  :config (add-hook 'org-mode-hook 'org-appear-mode))
+  (with-eval-after-load 'org
+    (add-to-list 'org-agenda-files "[...]"))
 #+end_src
-* Various IDE packages
-** [[https://www.emacswiki.org/emacs/MarkdownMode][markdown-mode]]
-#+begin_src emacs-lisp
-(use-package markdown-mode :ensure t)
-#+end_src
-** [[https://github.com/yoshiki/yaml-mode][yaml-mode]]
-#+begin_src emacs-lisp
-(use-package yaml-mode :ensure t)
-#+end_src
-** [[https://github.com/clojure-emacs/clojure-mode/][clojure-mode]]
-#+begin_src emacs-lisp
-(use-package clojure-mode :ensure t)
-#+end_src
-** [[https://github.com/JuliaEditorSupport/julia-emacs][julia-mode]]
-#+begin_src emacs-lisp
-(use-package julia-mode :ensure t)
-#+end_src
-** [[https://github.com/emacs-typescript/typescript.el][typescript-mode]]
-#+begin_src emacs-lisp
-(use-package typescript-mode
-  :ensure t
-  :config
-  (define-derived-mode typescriptreact-mode typescript-mode "TypeScript TSX")
-  (add-to-list 'auto-mode-alist '("\\.tsx?\\'" . typescriptreact-mode))
-  )
-#+end_src
-** [[https://github.com/rust-lang/rust-mode][rust-mode]]
-#+begin_src emacs-lisp
-(use-package rust-mode :ensure t)
-#+end_src
-** [[https://github.com/taquangtrung/lark-mode][lark-mode]]
-#+begin_src emacs-lisp
-(use-package lark-mode :ensure t)
-#+end_src
-** [[https://github.com/jaypei/emacs-neotree][emacs-neotree]]
-#+begin_src emacs-lisp
-(use-package neotree
-  :ensure t
-  :init
-  (global-set-key [f8] 'neotree-toggle)
-  (setq-default neo-show-hidden-files t))
-#+end_src
-** [[https://github.com/akermu/emacs-libvterm][emacs-libvterm]]
-Terminal emulation using ~emacs-libvterm~. Might need to install ~libvterm~ via ~sudo apt install libvterm-dev~.
-#+begin_src emacs-lisp
-;; TODO: figure out on Windows
-(if (not (eq system-type 'windows-nt))
-    (use-package vterm :ensure t))
-#+end_src
-** [[https://magit.vc/][Magit]]
-~magit-delta-mode~ requires [[https://github.com/dandavison/delta?tab=readme-ov-file][~delta~]] to be installed, refer to the [[https://dandavison.github.io/delta/installation.html][relevant documentation page]].
-#+begin_src emacs-lisp
-  ;; TODO: figure out on Windows
-  (if (not (eq system-type 'windows-nt))
-      (use-package magit-delta
-        :ensure t
-        :hook (magit-mode . magit-delta-mode))
-    (use-package magit
-      :ensure t
-      :config
-      (setq package-install-upgrade-built-in t)
-      (add-hook 'magit-mode-hook (lambda () (magit-delta-mode +1)))
-      )
-    )
-#+end_src
-** [[https://www.emacswiki.org/emacs/ParenSetMode][Paren mode]]
-#+begin_src emacs-lisp
-(use-package paren
-  :config
-  (show-paren-mode 1)
-  (setq show-paren-style 'parenthesis)
-  (setq show-paren-when-point-in-periphery t)
-  (setq show-paren-when-point-inside-paren t))
-#+end_src
-** [[https://github.com/sheijk/hideshowvis][hideshowvis]]
-"Add little clickable +/- icons in the Emacs fringe for regions which Emacs' hideshow.el can hide."
-#+begin_src emacs-lisp
-(use-package hideshowvis :ensure t :config (add-hook 'python-mode-hook 'hideshowvis-minor-mode))
-#+end_src
-* Miscellaneous
-** Normal copy-pasting in Windows
-I believe copy-pasting (in the Emacs sense of it) stopped to working with Emacs 27. The following code block fixes it.
-#+begin_src emacs-lisp
-(if (eq system-type 'windows-nt)
-    (progn
-      (set-clipboard-coding-system 'utf-16-le)
-      (set-selection-coding-system 'utf-16-le))
-  (set-selection-coding-system 'utf-8))
-(setq locale-coding-system 'utf-8)
-(set-terminal-coding-system 'utf-8)
-(set-keyboard-coding-system 'utf-8)
-(prefer-coding-system 'utf-8)
-#+end_src
-** [[https://github.com/minad/consult][consult]]
-#+begin_src emacs-lisp
-(use-package consult :ensure t)
-#+end_src
-** [[https://github.com/bbatsov/projectile][projectile]]
-#+begin_src emacs-lisp
-(use-package projectile
-  :ensure t
-  :config
-  (projectile-mode +1)
-  (setq projectile-project-search-path '("/home/gorka/dev"))
-  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
-#+end_src
-** [[https://github.com/alphapapa/org-make-toc][org-make-toc]]
-"Usage" section in the README of the link in the header of this subsection describes well how to use this package. Quoting it:
-
-=To make a basic TOC, follow these steps:=
-
-1. =Choose a heading to contain a TOC and move the point to it.=
-2. =Run command org-make-toc-insert, which inserts a :CONTENTS: drawer and sets TOC properties. Set the include property to all.=
-3. =Run the command org-make-toc to update all TOCs in the document.=
-
-=Use command org-make-toc-set to change TOC properties for the entry at point with completion.=
-
-Nevertheless, after running ~org-make-toc-insert~ I had to remove all TOC properties but ~:include all~ and ~:depth 2~ to customize the table of contents to my liking.
-#+begin_src emacs-lisp
-(use-package org-make-toc :ensure t)
-#+end_src
-
-
-#+TITLE: Literate emacs init
-#+AUTHOR: Gorka Eraña
-#+EMAIL: eranagorka@gmail.com
-#+DATE: <2021-05-12 Wed>
-#+CREATED: 2021-05-12
-#+STARTUP: hidestars indent overview
-#+PROPERTY: header-args :results silent :tangle "./init.el"
-#+OPTIONS: toc:2
-
-Create ~init.el~ by tangling the contents of the code blocks: "C-c C-v t" (~org-babel-tangle~).
-
+* Potential improvements
+Ideally the steps described in the previous section would happen automatically. E.g. via ~org-babel-tangle~ into a bash script or something.
