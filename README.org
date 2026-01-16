@@ -16,7 +16,7 @@ I finally got around to using [[https://github.com/syl20bnr/spacemacs][spacemacs
 #+end_src
 ** Choose mode and distribution
 Upon first spacemacs start up choose "emacs mode" and the "standard distribution".
-** Within =~.spacemacs=
+** Within =~/.spacemacs=
 *** Under =dotspacemacs-configuration-layers=
 - Uncomment: =git=, =lsp=, =markdown=, =org=, =treemacs=.
 - Activate =vterm= with the below configuration. (Note: it will have to be compiled the first time it is used.)
