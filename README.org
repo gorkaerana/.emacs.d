@@ -18,7 +18,8 @@ I finally got around to using [[https://github.com/syl20bnr/spacemacs][spacemacs
 Upon first spacemacs start up choose "emacs mode" and the "standard distribution".
 ** Within =~/.spacemacs=
 *** Under =dotspacemacs-configuration-layers=
-- Uncomment: =git=, =lsp=, =markdown=, =org=, =treemacs=.
+- Uncomment: =lsp=, =markdown=, =org=, =treemacs=.
+- Add: =docker=, =dockerfile=.
 - Activate =vterm= with the below configuration. (Note: it will have to be compiled the first time it is used.)
 #+begin_src emacs-lisp
   (shell :variables
@@ -26,9 +27,13 @@ Upon first spacemacs start up choose "emacs mode" and the "standard distribution
          shell-default-position 'bottom
          shell-default-shell 'vterm)
 #+end_src
-- Enable =magit= and =magit-delta= with
+- Enable =magit= and =magit-delta= by replacing =git= with
 #+begin_src emacs-lisp
   (git :variables git-enable-magit-delta-plugin t)
+#+end_src
+- Switch on a couple of org mode goodies by replace =org= with
+#+begin_src emacs-lisp
+  (org :variables org-enable-modern-support t org-enable-appear-support t)
 #+end_src
 *** Under =dotspacemacs/init=
 Set relative line numbers with ~dotspacemacs-line-numbers 'relative~
@@ -48,6 +53,8 @@ Add
    )
   ;; Toggle treemacs more easily
   (global-set-key [f8] 'treemacs)
+  ;; Open files with a single click in treemacs
+  (define-key treemacs-mode-map [mouse-1] #'treemacs-single-click-expand-action)
 #+end_src
 *** Under =dotspacemacs/user-config=
 Add the below, where =[...]= is a placeholder for the files and folders you want to be included in Org Agenda
