@@ -67,10 +67,12 @@ Add
   (define-key treemacs-mode-map [mouse-1] #'treemacs-single-click-expand-action)
 #+end_src
 *** Under =dotspacemacs/user-config=
-Add the below, where =[...]= is a placeholder for the files and folders you want to be included in Org Agenda.
+Add the below, where =[...]= is a placeholder for the files and folders you want to be included in Org Agenda. The =auto-mode-alist= entry ensures journal files automatically open in =org-journal-mode=.
 #+begin_src emacs-lisp
   (with-eval-after-load 'org
     (add-to-list 'org-agenda-files "[...]"))
+  (with-eval-after-load 'org-journal
+    (add-to-list 'auto-mode-alist '("/journal/[0-9]\\{4\\}-[0-9]\\{2\\}-[0-9]\\{2\\}\\.org\\'" . org-journal-mode)))
 #+end_src
 *** Under =dotspacemacs-additional-packages=
 Set it to ='(ripgrep)=
