@@ -31,10 +31,20 @@ Upon first spacemacs start up choose "emacs mode" and the "standard distribution
 #+begin_src emacs-lisp
   (git :variables git-enable-magit-delta-plugin t)
 #+end_src
-- Switch on a couple of org mode goodies by replace =org= with
+- Switch on a couple of org mode goodies by replacing =org= with, where =[...]= is a placeholder for the =org-journal= directory path
 #+begin_src emacs-lisp
-  (org :variables org-enable-modern-support t org-enable-appear-support t)
+  (org :variables
+       org-enable-modern-support t
+       org-enable-appear-support t
+       org-enable-org-journal-support t
+       org-journal-dir "[...]"
+       org-journal-file-format "%Y-%m-%d.org"
+       org-journal-date-prefix "#+TITLE: "
+       org-journal-date-format "%A, %B %d %Y"
+       org-journal-time-prefix "* "
+       org-journal-time-format "")
 #+end_src
+This configures org-journal with ISO 8601 daily files (=YYYY-MM-DD.org=), where each file has a =#+TITLE:= header with the full date, and new time entries use a top-level =*= heading.
 *** Under =dotspacemacs/init=
 Set relative line numbers with ~dotspacemacs-line-numbers 'relative~
 *** Under =dotspacemacs/user-init=
@@ -57,7 +67,7 @@ Add
   (define-key treemacs-mode-map [mouse-1] #'treemacs-single-click-expand-action)
 #+end_src
 *** Under =dotspacemacs/user-config=
-Add the below, where =[...]= is a placeholder for the files and folders you want to be included in Org Agenda
+Add the below, where =[...]= is a placeholder for the files and folders you want to be included in Org Agenda.
 #+begin_src emacs-lisp
   (with-eval-after-load 'org
     (add-to-list 'org-agenda-files "[...]"))
