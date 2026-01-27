@@ -60,6 +60,8 @@ Add
                             ("WAITING" . (:foreground "red" :weight bold))
                             ("CANCELLED" . (:foreground "black" :weight bold))
                             )
+   org-startup-indented t
+   org-hide-leading-stars t
    )
   ;; Toggle treemacs more easily
   (global-set-key [f8] 'treemacs)
