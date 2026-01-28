@@ -44,7 +44,13 @@ Upon first spacemacs start up choose "emacs mode" and the "standard distribution
        org-journal-time-prefix "* "
        org-journal-time-format "")
 #+end_src
-This configures org-journal with ISO 8601 daily files (=YYYY-MM-DD.org=), where each file has a =#+TITLE:= header with the full date, and new time entries use a top-level =*= heading.
+- Enable tabs
+#+begin_src emacs-lisp
+  (tabs :variables
+        tabs-selected-tab-bar 'over
+        tabs-auto-hide t
+        tabs-auto-hide-delay 3)
+#+end_src
 *** Under =dotspacemacs/init=
 Set relative line numbers with ~dotspacemacs-line-numbers 'relative~
 *** Under =dotspacemacs/user-init=
